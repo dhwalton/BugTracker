@@ -32,10 +32,10 @@ namespace BugTracker.Migrations
                     TicketStatusId = c.Int(nullable: false),
                     OwnerUserId = c.String(maxLength: 128),
                     AssignedUserId = c.String(maxLength: 128),
-                    ApplicationUser_Id = c.String(maxLength: 128),
+                    //ApplicationUser_Id = c.String(maxLength: 128),
                 })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
+                //.ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.AssignedUserId)
                 .ForeignKey("dbo.AspNetUsers", t => t.OwnerUserId)
                 .ForeignKey("dbo.Projects", t => t.ProjectId, cascadeDelete: true)
@@ -47,8 +47,8 @@ namespace BugTracker.Migrations
                 .Index(t => t.TicketPriorityId)
                 .Index(t => t.TicketStatusId)
                 .Index(t => t.OwnerUserId)
-                .Index(t => t.AssignedUserId)
-                .Index(t => t.ApplicationUser_Id);
+                .Index(t => t.AssignedUserId);
+                //.Index(t => t.ApplicationUser_Id);
 
             CreateTable(
                 "dbo.AspNetUsers",
@@ -231,18 +231,18 @@ namespace BugTracker.Migrations
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.Name, unique: true, name: "RoleNameIndex");
 
-            CreateTable(
-                "dbo.ApplicationUserProjects",
-                c => new
-                {
-                    ApplicationUser_Id = c.String(nullable: false, maxLength: 128),
-                    Projects_Id = c.Int(nullable: false),
-                })
-                .PrimaryKey(t => new { t.ApplicationUser_Id, t.Projects_Id })
-                .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id, cascadeDelete: true)
-                .ForeignKey("dbo.Projects", t => t.Projects_Id, cascadeDelete: true)
-                .Index(t => t.ApplicationUser_Id)
-                .Index(t => t.Projects_Id);
+            //CreateTable(
+            //    "dbo.ApplicationUserProjects",
+            //    c => new
+            //    {
+            //        ApplicationUser_Id = c.String(nullable: false, maxLength: 128),
+            //        Projects_Id = c.Int(nullable: false),
+            //    })
+            //    .PrimaryKey(t => new { t.ApplicationUser_Id, t.Projects_Id })
+            //    .ForeignKey("dbo.AspNetUsers", t => t.ApplicationUser_Id, cascadeDelete: true)
+            //    .ForeignKey("dbo.Projects", t => t.Projects_Id, cascadeDelete: true)
+            //    .Index(t => t.ApplicationUser_Id)
+            //    .Index(t => t.Projects_Id);
 
         }
 

@@ -175,3 +175,4 @@ e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.Migrations.Ini
 e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.csproj.GenerateResource.Cache
 e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.dll
 e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.pdb
+e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.Migrations.Initial1.resources

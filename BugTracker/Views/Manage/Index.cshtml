@@ -10,24 +10,25 @@
     <h4>Change your account settings</h4>
     <hr />
     
-    @*@using (Html.BeginForm()) { 
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken();
         <dl class="dl-horizontal">
             <dt>First Name:</dt>
-            <dd><input type="text" name="FirstName" required class="form-control" /></dd>
+            <dd><input type="text" name="FirstName" required class="form-control"  value="@ViewBag.FirstName" /></dd>
         </dl>
         <dl class="dl-horizontal">
             <dt>Last Name:</dt>
-            <dd><input type="text" name="LastName" required class="form-control" /></dd>
+            <dd><input type="text" name="LastName" required class="form-control" value="@ViewBag.LastName" /></dd>
         </dl>
         <dl class="dl-horizontal">
             <dt>Display Name:</dt>
-            <dd><input type="text" name="DisplayName" required class="form-control" /></dd>
+            <dd><input type="text" name="DisplayName" required class="form-control"  value="@ViewBag.DisplayName" /></dd>
         </dl>
         <dl class="dl-horizontal">
             <dt></dt>
             <dd><input type="submit" /></dd>
         </dl>
-    }*@
+    }
 
     <dl class="dl-horizontal">
         <dt>Password:</dt>

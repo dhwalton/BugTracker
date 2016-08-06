@@ -58,5 +58,47 @@ namespace BugTracker.Helpers
             return userManager.Users.Where(u => !userIDs.Contains(u.Id)).ToList();
         }
 
+        // Some methods to help with getting/setting user fields
+        public string GetUserFirstName(string userId)
+        {
+            return userManager.FindById(userId).FirstName;
+        }
+
+        public string GetUserLastName(string userId)
+        {
+            return userManager.FindById(userId).LastName;
+        }
+
+        public string GetUserDisplayName(string userId)
+        {
+            return userManager.FindById(userId).Displayname;   
+        }
+
+        public IdentityResult SetUserFirstName(string userId, string newFirstName)
+        {
+            var user = userManager.FindById(userId);
+            user.FirstName = newFirstName;
+            return userManager.Update(user);
+
+           // db.Entry(user).State = EntityState.Modified;
+           // return db.SaveChanges();
+        }
+
+        public int SetUserLastName(string userId, string newLastName)
+        {
+            var user = userManager.FindById(userId);
+            user.LastName = newLastName;
+            db.Entry(user).State = EntityState.Modified;
+            return db.SaveChanges();
+        }
+
+        public int SetUserDisplayName(string userId, string newDisplayName)
+        {
+            var user = userManager.FindById(userId);
+            user.Displayname = newDisplayName;
+            db.Entry(user).State = EntityState.Modified;
+            return db.SaveChanges();
+        }
+
     }
 }

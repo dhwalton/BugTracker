@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BugTracker.Models;
 using System.Data.Entity;
+using BugTracker.Helpers;
 
 namespace BugTracker.Controllers
 {
@@ -17,6 +18,7 @@ namespace BugTracker.Controllers
     public class ManageController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private UserRolesHelper userHelper = new UserRolesHelper(new ApplicationDbContext());
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -58,15 +60,40 @@ namespace BugTracker.Controllers
         // Update user's first name, last name, display name
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateUserInfo([Bind(Include = "FirstName,LastName,DisplayName")] ApplicationUser user)
+        public ActionResult Index(string FirstName, string LastName, string DisplayName)
         {
-            // linq statement to find, update user
-            //var result = db.Posts.Where(p => p.Created <= DateTimeOffset.Now).Where(p => p.Published == true);
-            user.Id = User.Identity.GetUserId();
-            db.Entry(user).Entity.FirstName = user.FirstName;
-            db.Entry(user).Entity.LastName = user.LastName;
+            var userId = User.Identity.GetUserId();
 
-            return View("Index");
+            if (!String.IsNullOrEmpty(FirstName))
+            {
+                userHelper.SetUserFirstName(userId, FirstName);
+            }
+
+            if (!String.IsNullOrEmpty(LastName))
+            {
+                userHelper.SetUserLastName(userId, LastName);
+            }
+
+            if (!String.IsNullOrEmpty(DisplayName))
+            {
+                userHelper.SetUserDisplayName(userId, DisplayName);
+            }
+
+            ViewBag.FirstName = userHelper.GetUserFirstName(userId);
+            ViewBag.LastName = userHelper.GetUserLastName(userId);
+            ViewBag.DisplayName = userHelper.GetUserDisplayName(userId);
+
+            var model = new IndexViewModel
+            {
+                HasPassword = HasPassword(),
+                PhoneNumber =  UserManager.GetPhoneNumber(userId),
+                TwoFactor =  UserManager.GetTwoFactorEnabled(userId),
+                Logins =  UserManager.GetLogins(userId),
+                BrowserRemembered = AuthenticationManager.TwoFactorBrowserRemembered(userId)
+            };
+
+
+            return View(model);         
         }
 
         //
@@ -83,6 +110,11 @@ namespace BugTracker.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+
+            ViewBag.FirstName = userHelper.GetUserFirstName(userId);
+            ViewBag.LastName = userHelper.GetUserLastName(userId);
+            ViewBag.DisplayName = userHelper.GetUserDisplayName(userId);
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
