@@ -100,5 +100,10 @@ namespace BugTracker.Helpers
             return db.SaveChanges();
         }
 
+        public IList<ApplicationUser> AllUsers()
+        {
+            return userManager.Users.ToList();
+        }
+
     }
 }

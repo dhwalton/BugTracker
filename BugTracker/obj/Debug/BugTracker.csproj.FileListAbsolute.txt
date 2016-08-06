@@ -171,8 +171,5 @@ e:\My Documents\GitHub\BugTracker\BugTracker\bin\Microsoft.Owin.Security.Google.
 e:\My Documents\GitHub\BugTracker\BugTracker\bin\Microsoft.Owin.Security.Twitter.xml
 e:\My Documents\GitHub\BugTracker\BugTracker\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.csprojResolveAssemblyReference.cache
-e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.Migrations.Initial.resources
-e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.csproj.GenerateResource.Cache
 e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.dll
 e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.pdb
-e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.Migrations.Initial1.resources

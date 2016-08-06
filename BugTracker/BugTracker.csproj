@@ -220,14 +220,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\UserRolesHelper.cs" />
-    <Compile Include="Migrations\201608051501101_Initial.cs" />
-    <Compile Include="Migrations\201608051501101_Initial.Designer.cs">
-      <DependentUpon>201608051501101_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201608061811061_Initial1.cs" />
-    <Compile Include="Migrations\201608061811061_Initial1.Designer.cs">
-      <DependentUpon>201608061811061_Initial1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -240,6 +232,7 @@
     <Compile Include="Models\TicketAttachments.cs" />
     <Compile Include="Models\Tickets.cs" />
     <Compile Include="Models\Projects.cs" />
+    <Compile Include="Models\ViewModels.cs" />
     <Compile Include="Models\TicketTypes.cs" />
     <Compile Include="Models\TicketStatuses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -272,7 +265,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -317,6 +312,10 @@
     <Content Include="Views\Projects\Details.cshtml" />
     <Content Include="Views\Projects\Edit.cshtml" />
     <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Shared\_UserRoles.cshtml" />
+    <Content Include="Views\Projects\Developer.cshtml" />
+    <Content Include="Views\Projects\ProjectManager.cshtml" />
+    <Content Include="Views\Projects\UserRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -328,14 +327,6 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201608051501101_Initial.resx">
-      <DependentUpon>201608051501101_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201608061811061_Initial1.resx">
-      <DependentUpon>201608061811061_Initial1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

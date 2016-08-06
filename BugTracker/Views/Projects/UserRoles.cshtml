@@ -1,0 +1,7 @@
+﻿@model IEnumerable<BugTracker.Models.ProjectUsers>
+
+
+@foreach (var item in Model)
+{
+    <p>@item.User.Email</p>
+}
