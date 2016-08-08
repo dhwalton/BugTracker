@@ -1,7 +1,10 @@
-﻿@model IEnumerable<BugTracker.Models.ProjectUsers>
+﻿@using BugTracker.Models;
+@model IEnumerable<BugTracker.Models.ApplicationUser>
 
-
-@foreach (var item in Model)
-{
-    <p>@item.User.Email</p>
-}
+<table id="user-list">
+    <tr><th>Email</th><th>First Name</th><th>Last Name</th><th>Display Name</th><th>Action</th></tr>
+    @foreach (var item in Model)
+    {
+        <tr><td>@item.Email</td><td>@item.FirstName</td><td>@item.LastName</td><td>@item.Displayname</td><td>@Html.ActionLink("Edit","EditUserRoles",new { id=item.Id })</td></tr>
+    }
+</table>

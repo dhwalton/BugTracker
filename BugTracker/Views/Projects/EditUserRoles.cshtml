@@ -1,0 +1,41 @@
+﻿@model BugTracker.Models.AdminUserViewModel
+@{
+    ViewBag.Title = "EditUserRoles";
+}
+<div class="col-sm-6 col-sm-offset-3">
+    <div class="card-box row">
+        <div class="col-xs-12">
+            <h2 class="m-t-0 header-title"><b>Assign Roles to @Model.User.Displayname</b></h2>
+            <p class="text-muted font-13 m-b-30">
+                This form displays the current roles assigned to the user: @Model.User.FirstName @Model.User.LastName. Use the dropdown to select the roles that this user should be assigned. Once roles are selected, click "Assign Roles" to submit the form.
+            </p>
+            <hr />
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Roles, "Roles for " + @Model.User.Displayname, new { @class = "col-sm-6 text-right control-label" })
+                        @Html.ListBox("SelectedRoles", Model.Roles, new { @id = "multi-select-box", @class = "col-sm-6", multiple = "multiple" })
+                    </div>
+                </div>
+                <hr />
+                <div class="col-sm-12">
+                    <div class="form-group pull-right">
+                        <input type="submit" value="Assign Roles" class="btn btn-info" />
+                        @Html.ActionLink("Cancel", "Index", "Users", new { @class = "btn btn-info" })
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#multi-select-box').multiselect();
+        });
+    </script>
+}

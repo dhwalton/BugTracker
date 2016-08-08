@@ -22,3 +22,16 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#user-list {
+    margin: 3em auto;
+    width: 90%;
+}
+
+#user-list td {
+    padding: 0.5em;
+}
+
+#user-list tr:nth-child(odd) {
+    background-color: rgba(0,0,0,0.15);
+}

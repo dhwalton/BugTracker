@@ -7,38 +7,102 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
-using BugTracker.Helpers;
+using System.Web.Security;
 
 namespace BugTracker.Controllers
 {
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private UserRolesHelper userHelper = new UserRolesHelper(new ApplicationDbContext());
+        private UserRolesHelper userHelper = new UserRolesHelper();
+
 
         // GET: Projects
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles="Admin,Developer,Project Manager")]
         public ActionResult Index()
         {
-            return View(db.Projects.ToList());
+            if (User.IsInRole("Admin"))
+            {
+                return View(db.Projects.ToList());
+            }
+            else if (User.IsInRole("Project Manager"))
+            {
+                return RedirectToAction("ProjectManager");
+            }
+            else if (User.IsInRole("Developer"))
+            {
+                return RedirectToAction("Developer");
+            } else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [Authorize(Roles = "Admin")]
         public ActionResult UserRoles()
         {
-            return View(userHelper.UsersNotInRole("Admin"));
+            var users = db.Users.ToList().OrderBy(u => u.LastName);
+            return View(users);
+
+        }
+
+        public ActionResult EditUserRoles(string id)
+        {
+            var user = db.Users.Find(id);
+            AdminUserViewModel AdminModel = new AdminUserViewModel();
+            UserRolesHelper helper = new UserRolesHelper();
+            var selected = helper.ListUserRoles(id);
+            AdminModel.Roles = new MultiSelectList(db.Roles, "Name", "Name", selected);
+            AdminModel.User = user;
+
+            return View(AdminModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public ActionResult EditUserRoles(AdminUserViewModel model, string id)
+        {
+            //var user = User.Identity.GetUserId();
+            UserRolesHelper helper = new UserRolesHelper();
+            //var currentRoles = helper.ListUserRoles(id);
+            if (model.SelectedRoles == null)
+            {
+                model.SelectedRoles = new string[] { "" };
+            }
+            foreach (var role in db.Roles.Select(r => r.Name))
+            {
+                if (model.SelectedRoles.Contains(role))
+                {
+                    helper.AddUserToRole(id, role);
+                }
+                else
+                {
+                    helper.RemoveUserFromRole(id, role);
+                }
+            }
+
+            return RedirectToAction("UserRoles");
         }
 
         [Authorize(Roles = "Admin,Developer")]
         public ActionResult Developer()
         {
-            return View();
+            //var ph = new ProjectsHelper(db);
+            //var projects = ph.ProjectsAssignedToUser(User.Identity.Name);
+            var uh = new UserRolesHelper();
+            ViewBag.CurrentUser = uh.GetUserByName(User.Identity.Name);
+            
+            return View(db.Projects.ToList());
         }
 
         [Authorize(Roles = "Admin,Project Manager")]
         public ActionResult ProjectManager()
         {
-            return View();
+            var uh = new UserRolesHelper();
+            ViewBag.CurrentUser = uh.GetUserByName(User.Identity.Name);
+
+            return View(db.Projects.ToList());
         }
 
         // GET: Projects/Details/5
@@ -90,12 +154,19 @@ namespace BugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Projects projects = db.Projects.Find(id);
-            if (projects == null)
+            var projHelper = new ProjectsHelper(db);
+
+            AdminProjectEditModel p = new AdminProjectEditModel();
+            p.Project = db.Projects.Find(id);
+            
+            p.Users = projHelper.UsersInProject(id);
+
+            //Projects projects = db.Projects.Find(id);
+            if (p == null)
             {
                 return HttpNotFound();
             }
-            return View(projects);
+            return View(p);
         }
 
         // POST: Projects/Edit/5

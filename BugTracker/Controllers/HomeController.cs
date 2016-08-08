@@ -1,5 +1,4 @@
-﻿using BugTracker.Helpers;
-using BugTracker.Models;
+﻿using BugTracker.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace BugTracker.Controllers
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private UserRolesHelper rolesHelper = new UserRolesHelper(new ApplicationDbContext());
+        private UserRolesHelper rolesHelper = new UserRolesHelper();
 
         public ActionResult Index()
         {

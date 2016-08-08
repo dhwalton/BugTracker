@@ -219,12 +219,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ProjectsHelper.cs" />
     <Compile Include="Helpers\UserRolesHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\ProjectUsers.cs" />
     <Compile Include="Models\TicketHistories.cs" />
     <Compile Include="Models\TicketNotifications.cs" />
     <Compile Include="Models\TicketComments.cs" />
@@ -232,7 +232,7 @@
     <Compile Include="Models\TicketAttachments.cs" />
     <Compile Include="Models\Tickets.cs" />
     <Compile Include="Models\Projects.cs" />
-    <Compile Include="Models\ViewModels.cs" />
+    <Compile Include="Models\AdminModel.cs" />
     <Compile Include="Models\TicketTypes.cs" />
     <Compile Include="Models\TicketStatuses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -316,6 +316,7 @@
     <Content Include="Views\Projects\Developer.cshtml" />
     <Content Include="Views\Projects\ProjectManager.cshtml" />
     <Content Include="Views\Projects\UserRoles.cshtml" />
+    <Content Include="Views\Projects\EditUserRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

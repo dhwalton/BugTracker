@@ -8,7 +8,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BugTracker.Models;
 using System.Data.Entity;
-using BugTracker.Helpers;
 
 namespace BugTracker.Controllers
 {
@@ -18,7 +17,7 @@ namespace BugTracker.Controllers
     public class ManageController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private UserRolesHelper userHelper = new UserRolesHelper(new ApplicationDbContext());
+        private UserRolesHelper userHelper = new UserRolesHelper();
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
