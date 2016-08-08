@@ -109,19 +109,22 @@ namespace BugTracker.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
-
-            ViewBag.FirstName = userHelper.GetUserFirstName(userId);
-            ViewBag.LastName = userHelper.GetUserLastName(userId);
-            ViewBag.DisplayName = userHelper.GetUserDisplayName(userId);
-
+            var user = userHelper.GetUserByName(User.Identity.Name);
+            
             var model = new IndexViewModel
             {
+                
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+
+            model.FirstName = user.FirstName;
+            model.LastName = user.LastName;
+            model.DisplayName = user.Displayname;
+
             return View(model);
         }
 

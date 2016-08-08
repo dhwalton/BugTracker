@@ -42,7 +42,7 @@ namespace BugTracker.Models
         public virtual ICollection<TicketHistories> TicketHistories { get; set; }
         public virtual ICollection<TicketComments> TicketComments { get; set; }
 
-        //public virtual Projects Project { get; set; }
+        public virtual Projects Project { get; set; }
         public virtual TicketTypes TicketType { get; set; }
         public virtual TicketPriorities TicketPriority { get; set; }
         public virtual TicketStatuses TicketStatus { get; set; }

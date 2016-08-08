@@ -32,7 +32,8 @@ namespace BugTracker.Controllers
             else if (User.IsInRole("Developer"))
             {
                 return RedirectToAction("Developer");
-            } else
+            }
+            else
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -43,7 +44,14 @@ namespace BugTracker.Controllers
         {
             var users = db.Users.ToList().OrderBy(u => u.LastName);
             return View(users);
+        }
 
+        // ******* THIS IS AN ALTERNATIVE TO THE UserRoles() METHOD ********* 
+        [Authorize(Roles = "Admin")]
+        public ActionResult UserManager()
+        {
+            var users = db.Users.ToList().OrderBy(u => u.LastName);
+            return View(users);
         }
 
         public ActionResult EditUserRoles(string id)
@@ -177,6 +185,7 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,StartDate")] Projects projects)
         {
+            
             if (ModelState.IsValid)
             {
                 db.Entry(projects).State = EntityState.Modified;

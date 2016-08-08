@@ -24,7 +24,8 @@ namespace BugTracker
             var apiKey = ConfigurationManager.AppSettings["SendGridAPIKey"];
             var from = ConfigurationManager.AppSettings["ContactEmail"];
             SendGridMessage myMessage = new SendGridMessage();
-            myMessage.AddTo(from);
+            myMessage.AddTo(message.Destination);
+            
             myMessage.From = new MailAddress(from);
             myMessage.Subject = message.Subject;
             myMessage.Html = message.Body;
