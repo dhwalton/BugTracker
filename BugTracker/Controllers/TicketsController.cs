@@ -7,13 +7,14 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BugTracker.Controllers
 {
     public class TicketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        
         // GET: Tickets
         public ActionResult Index()
         {
@@ -39,6 +40,7 @@ namespace BugTracker.Controllers
         }
 
         // GET: Tickets/Create
+        [Authorize(Roles = "Admin, Developer, Project Manager, Submitter")]
         public ActionResult Create()
         {
             ViewBag.AssignedUserId = new SelectList(db.Users, "Id", "FirstName");
@@ -56,6 +58,12 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedUserId")] Tickets tickets)
         {
+            var helper = new UserRolesHelper();
+            tickets.OwnerUserId = helper.GetUserByName(User.Identity.Name).Id;
+            tickets.Created = DateTimeOffset.Now;
+            tickets.AssignedUserId = null;
+            tickets.TicketStatusId = 1;
+            tickets.Updated = null;
             if (ModelState.IsValid)
             {
                 db.Tickets.Add(tickets);

@@ -1,0 +1,14 @@
+﻿@using BugTracker.Models;
+@model BugTracker.Models.ListUsersRolesModel
+
+
+@foreach (var user in Model.Users)
+{
+    <div class="user-search">
+        @*<input type="checkbox" class="cb" id="@user.Id" />*@ 
+        @Html.ActionLink("Add", "AddUserToProject", new {ProjectId = Model.ProjectId, UserId = user.Id }, new { @class="addToProject" })
+        @user.FirstName @user.LastName | @user.Displayname | @user.Email
+    </div>
+}
+
+

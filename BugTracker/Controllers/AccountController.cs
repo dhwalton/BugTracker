@@ -154,11 +154,13 @@ namespace BugTracker.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var helper = new UserRolesHelper();
 
+                
                 // Donny added: user first name, last name, display name
                 user.FirstName = FirstName;
                 user.LastName = LastName;
-
+                
                 // concatenate firstname & lastname if displayname isn't filled out
                 if (String.IsNullOrWhiteSpace(DisplayName))
                 {
@@ -167,6 +169,8 @@ namespace BugTracker.Controllers
                 user.Displayname = DisplayName;
 
                 var result = await UserManager.CreateAsync(user, model.Password);
+                
+
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
@@ -176,6 +180,8 @@ namespace BugTracker.Controllers
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                    //helper.AddUserToRole(user.Id, "Submitter");
 
                     return RedirectToAction("Index", "Home");
                 }

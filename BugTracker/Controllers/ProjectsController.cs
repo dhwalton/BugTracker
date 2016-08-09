@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
 using System.Web.Security;
+using Microsoft.AspNet.Identity;
 
 namespace BugTracker.Controllers
 {
@@ -54,19 +55,36 @@ namespace BugTracker.Controllers
             return View(users);
         }
 
+        // partial view for listing all users for the purpose of adding to a project
+        [Authorize(Roles = "Admin")]
+        public ActionResult _AddUserToProject(ListUsersRolesModel model)
+        {
+            
+            //model.Roles = userHelper.ListAllRoles();
+            return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public void AddUserToProject(string userId, int projectId)
+        {
+            var helper = new ProjectsHelper();
+            helper.AddUserToProject(projectId, userId);
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public ActionResult RemoveProjectUser([Bind(Include = "ProjectId,UserId")] RemoveUserFromProjectModel model)
+        public void RemoveProjectUser([Bind(Include = "ProjectId,UserId")] RemoveUserFromProjectModel model)
         {
             var helper = new ProjectsHelper();
             helper.RemoveUserFromProject(model.ProjectId, model.UserId);
 
-            // set up the model needed for edit view
-            var returnModel = new AdminProjectEditModel();
-            returnModel.Project = db.Projects.First(p => p.Id == model.ProjectId);
-            returnModel.Users = returnModel.Project.Users.ToList();
-            // return to edit view
-            return View("Edit",returnModel);
+            //// set up the model needed for edit view
+            //var returnModel = new AdminProjectEditModel();
+            //returnModel.Project = db.Projects.First(p => p.Id == model.ProjectId);
+            //returnModel.Users = returnModel.Project.Users.ToList();
+            //// return to edit view
+            //return View("Edit",returnModel);
         }
 
 
@@ -130,18 +148,36 @@ namespace BugTracker.Controllers
         }
 
         // GET: Projects/Details/5
+        [Authorize (Roles = "Admin, Project Manager, Developer")]
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Projects projects = db.Projects.Find(id);
-            if (projects == null)
+            var helper = new ProjectsHelper();
+            var tHelper = new TicketsHelper();
+            var viewModel = new ProjectDetailViewModel();
+            var userId = User.Identity.GetUserId();
+
+            viewModel.Project = db.Projects.Find(id);
+            
+            viewModel.AssignedTickets = tHelper.TicketsAssignedToUserInProject(userId, id ?? 1);
+            viewModel.UnassignedTickets = tHelper.TicketsNotAssignedToUserInProject(userId, id ?? 1);
+
+            if (viewModel.Project == null)
             {
                 return HttpNotFound();
             }
-            return View(projects);
+            
+
+            // deny access to non-admin users attempting to access projects to which they aren't assigned
+            if (!User.IsInRole("Admin") && !helper.IsUserInProject(User.Identity.GetUserId(), id ?? 1))
+            {
+                return RedirectToAction("Index");
+                
+            }
+            return View(viewModel);
         }
 
         // GET: Projects/Create
@@ -184,6 +220,12 @@ namespace BugTracker.Controllers
             p.Project = db.Projects.Find(id);
             
             p.Users = projHelper.UsersInProject(id);
+            //var uList = db.Users.ToList().OrderBy(u => u.LastName);
+            var uList = projHelper.UsersNotInProject(id).OrderBy(u => u.LastName);
+
+            p.UserList = new ListUsersRolesModel();
+            p.UserList.Users = uList;
+            p.UserList.ProjectId = id ?? 1;
 
             //Projects projects = db.Projects.Find(id);
             if (p == null)

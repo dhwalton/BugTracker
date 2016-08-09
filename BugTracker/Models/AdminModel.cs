@@ -18,11 +18,21 @@ namespace BugTracker.Models
     {
         public Projects Project { get; set; }
         public IList<ApplicationUser> Users { get; set; }
+        public ListUsersRolesModel UserList { get; set; }
     }
 
     public class RemoveUserFromProjectModel
     {
         public int ProjectId { get; set; }
         public string UserId { get; set; }
+    }
+
+    public class ListUsersRolesModel
+    {
+        public int ProjectId { get; set; }
+        public IOrderedEnumerable<ApplicationUser> Users { get; set; }
+        public ICollection<IdentityUserRole> Roles { get; set; }
+
+        public virtual Projects Project { get; set; }
     }
 }

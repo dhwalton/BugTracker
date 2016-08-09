@@ -16,6 +16,13 @@ public class ProjectsHelper
         userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
     }
 
+    public bool IsUserOnProject(string userId, int projectId)
+    {
+        var project = db.Projects.Find(projectId);
+        var flag = project.Users.Any(u => u.Id == userId);
+        return flag;
+    }
+
     // generate a list of projects assigned to a user
     public IList<Projects> ProjectsAssignedToUser(string userName)
     {
@@ -44,18 +51,39 @@ public class ProjectsHelper
         return resultList;
     }
 
+    // get a list of all users assigned to a project
+    public IList<ApplicationUser> UsersNotInProject(int? projectId)
+    {
+        if (projectId == null) return null;
+        var resultList = new List<ApplicationUser>();
+        resultList = db.Users.Where(p => !p.Projects.Any(n => n.Id == projectId)).ToList();
+        
+
+        return resultList;
+    }
+
     // remove a user from a project 
     public bool RemoveUserFromProject(int projectId, string userId)
     {
-        var project = db.Projects.First(p => p.Id == projectId);
-        var result = project.Users.Remove(userManager.FindById(userId));
+        var project = db.Projects.Find(projectId);
+        var user = db.Users.Find(userId);
+        var result = project.Users.Remove(user);
         if (result)
         {
-            // save to db
-            db.Entry(project).State = EntityState.Modified;
             db.SaveChanges();
         }
         return result;
     }
+
+    // add a user to a project
+    public void AddUserToProject(int projectId, string userId)
+    {
+        var project = db.Projects.Find(projectId);
+        var newUser = db.Users.Find(userId);
+        project.Users.Add(newUser);
+        db.SaveChanges();
+    }
+
+
 
 }

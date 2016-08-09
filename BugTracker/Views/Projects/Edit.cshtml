@@ -44,17 +44,21 @@
         </div>
     </div>
 }
+
+<h2>Add Users to this Project</h2>
+@Html.Partial("_AddUserToProject", Model.UserList)
+
+
 <h2>Users Assigned to this Project</h2>
 <table class="user-list">
-    <tr><th>First Name</th><th>Last Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
+    <tr><th>Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
     @foreach (var item in Model.Users)
     {
         <tr>
-            <td>@item.Email</td>
-            <td>@item.FirstName</td>
-            <td>@item.LastName</td>
+            <td>@item.FirstName @item.LastName</td>
             <td>@item.Displayname</td>
-            <td>@Html.ActionLink("X","RemoveProjectUser", new {ProjectId = Model.Project.Id, UserId = item.Id })</td>
+            <td>@item.Email</td>
+            <td>@Html.ActionLink("X","RemoveProjectUser", new {ProjectId = Model.Project.Id, UserId = item.Id }, new { @class = "removeFromProject" })</td>
         </tr>
     }
 </table>
@@ -69,3 +73,26 @@
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
+
+@section scripts {
+    <script>
+        $('.addToProject').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr("href"),
+                success: function () {
+                    location.reload();
+                }
+            });
+        });
+        $('.removeFromProject').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr("href"),
+                success: function () {
+                    location.reload();
+                }
+            });
+        });
+    </script>
+}

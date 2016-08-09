@@ -29,7 +29,7 @@ namespace BugTracker.Models
 
         [Required]
         public DateTimeOffset Created { get; set; }
-        public DateTimeOffset Updated { get; set; }
+        public DateTimeOffset? Updated { get; set; }
         public int ProjectId { get; set; }
         public int TicketTypeId { get; set; }
         public int TicketPriorityId { get; set; }

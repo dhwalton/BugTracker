@@ -1,40 +1,31 @@
-﻿@model BugTracker.Models.Projects
+﻿@model BugTracker.Models.ProjectDetailViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Html.DisplayFor(model => model.Project.Name)</h2>
+<h4>Project Started @Html.DisplayFor(model => model.Project.StartDate)</h4>
+<hr />
 
-<div>
-    <h4>Projects</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-
-    </dl>
-</div>
-
-@foreach (var ticket in Model.Tickets)
+@if (Model.AssignedTickets.Count > 0)
 {
-    <div><h3>@ticket.Title</h3><div>@ticket.Description</div></div>
+    <h3>Assigned Tickets</h3>
+    foreach (var ticket in Model.AssignedTickets)
+    {
+        <div><h4>@ticket.Title</h4><div>@ticket.Description</div></div>
+    }
+}
+else
+{
+    <h4>You have no tickets assigned for this project.</h4>
 }
 
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+@if (Model.UnassignedTickets.Count > 0)
+{
+    <hr />
+    foreach (var ticket in Model.UnassignedTickets)
+    {
+        <div><h4>@ticket.Title</h4><div>@ticket.Description</div></div>
+    }
+}
