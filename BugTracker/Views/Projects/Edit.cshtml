@@ -46,10 +46,16 @@
 }
 <h2>Users Assigned to this Project</h2>
 <table class="user-list">
-    <tr><th>First Name</th><th>Last Name</th><th>Display Name</th><th>Email</th></tr>
+    <tr><th>First Name</th><th>Last Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
     @foreach (var item in Model.Users)
     {
-        <tr><td>@item.FirstName</td><td>@item.LastName</td><td>@item.Displayname</td><td>@item.Email</td></tr>
+        <tr>
+            <td>@item.Email</td>
+            <td>@item.FirstName</td>
+            <td>@item.LastName</td>
+            <td>@item.Displayname</td>
+            <td>@Html.ActionLink("X","RemoveProjectUser", new {ProjectId = Model.Project.Id, UserId = item.Id })</td>
+        </tr>
     }
 </table>
 

@@ -19,4 +19,10 @@ namespace BugTracker.Models
         public Projects Project { get; set; }
         public IList<ApplicationUser> Users { get; set; }
     }
+
+    public class RemoveUserFromProjectModel
+    {
+        public int ProjectId { get; set; }
+        public string UserId { get; set; }
+    }
 }

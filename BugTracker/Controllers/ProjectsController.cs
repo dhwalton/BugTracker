@@ -54,6 +54,22 @@ namespace BugTracker.Controllers
             return View(users);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult RemoveProjectUser([Bind(Include = "ProjectId,UserId")] RemoveUserFromProjectModel model)
+        {
+            var helper = new ProjectsHelper();
+            helper.RemoveUserFromProject(model.ProjectId, model.UserId);
+
+            // set up the model needed for edit view
+            var returnModel = new AdminProjectEditModel();
+            returnModel.Project = db.Projects.First(p => p.Id == model.ProjectId);
+            returnModel.Users = returnModel.Project.Users.ToList();
+            // return to edit view
+            return View("Edit",returnModel);
+        }
+
+
         public ActionResult EditUserRoles(string id)
         {
             var user = db.Users.Find(id);
@@ -162,7 +178,7 @@ namespace BugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var projHelper = new ProjectsHelper(db);
+            var projHelper = new ProjectsHelper();
 
             AdminProjectEditModel p = new AdminProjectEditModel();
             p.Project = db.Projects.Find(id);

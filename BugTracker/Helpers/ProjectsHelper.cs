@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 public class ProjectsHelper
@@ -10,9 +11,9 @@ public class ProjectsHelper
     private ApplicationDbContext db = new ApplicationDbContext();
     private UserManager<ApplicationUser> userManager;
 
-    public ProjectsHelper(ApplicationDbContext context)
+    public ProjectsHelper()
     {
-        userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+        userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
     }
 
     // generate a list of projects assigned to a user
@@ -42,4 +43,19 @@ public class ProjectsHelper
 
         return resultList;
     }
+
+    // remove a user from a project 
+    public bool RemoveUserFromProject(int projectId, string userId)
+    {
+        var project = db.Projects.First(p => p.Id == projectId);
+        var result = project.Users.Remove(userManager.FindById(userId));
+        if (result)
+        {
+            // save to db
+            db.Entry(project).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+        return result;
+    }
+
 }
