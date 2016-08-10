@@ -33,12 +33,20 @@ public class TicketsHelper
         return tickets;
     }
 
-    // generate a list of tickets NOT assigned to a user
+    // generate a list of tickets NOT assigned to a user in a specific project
     public IList<Tickets> TicketsNotAssignedToUserInProject(string userId, int projectId)
     {
         var user = db.Users.Find(userId);
         var project = db.Projects.Find(projectId);
         var tickets = project.Tickets.Where(t => t.AssignedUser != user).ToList();
+        return tickets;
+    }
+
+    // generate a list of unassigned tickets for a project
+    public IList<Tickets> UnassignedTicketsInProject(int projectId)
+    {
+        var project = db.Projects.Find(projectId);
+        var tickets = project.Tickets.Where(t => t.AssignedUser == null).ToList();
         return tickets;
     }
 
