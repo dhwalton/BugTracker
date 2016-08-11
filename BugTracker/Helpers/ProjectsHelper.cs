@@ -83,7 +83,4 @@ public class ProjectsHelper
         project.Users.Add(newUser);
         db.SaveChanges();
     }
-
-
-
 }

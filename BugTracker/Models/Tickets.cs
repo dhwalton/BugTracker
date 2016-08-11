@@ -21,6 +21,7 @@ namespace BugTracker.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Ticket Title")]
         public string Title { get; set; }
 
         [Required]
@@ -28,7 +29,9 @@ namespace BugTracker.Models
         public string Description { get; set; }
 
         [Required]
+        [Display(Name = "Created On")]
         public DateTimeOffset Created { get; set; }
+        [Display(Name = "Updated On")]
         public DateTimeOffset? Updated { get; set; }
         public int ProjectId { get; set; }
         public int TicketTypeId { get; set; }

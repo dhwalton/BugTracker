@@ -11,17 +11,119 @@ using Microsoft.AspNet.Identity;
 
 namespace BugTracker.Controllers
 {
+    [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
     public class TicketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        
+
+        // sorts tickets by column - might possibly add ascending/descending functionality later
+        private IQueryable<Tickets> SortTicketsBy(IQueryable<Tickets> tickets, string orderby)
+        {
+            // I'm sure there's a better way to do this...
+            switch (orderby)
+            {
+                case "priority":
+                    // higher priority tickets are higher on the list
+                    tickets = tickets.OrderByDescending(t => t.TicketPriorityId);
+                    break;
+                case "updated":
+                    tickets = tickets.OrderBy(t => t.Updated);
+                    break;
+                case "status":
+                    tickets = tickets.OrderBy(t => t.TicketStatusId);
+                    break;
+                case "project":
+                    tickets = tickets.OrderBy(t => t.Project.Name);
+                    break;
+                case "title":
+                    tickets = tickets.OrderBy(t => t.Title);
+                    break;
+                case "type":
+                    tickets = tickets.OrderBy(t => t.TicketTypeId);
+                    break;
+                case "assigned":
+                    tickets = tickets.OrderBy(t => t.AssignedUser.Displayname);
+                    break;
+                case "submitted":
+                    tickets = tickets.OrderBy(t => t.OwnerUser.Displayname);
+                    break;
+                case "created":
+                    tickets = tickets.OrderBy(t => t.Created);
+                    break;
+                default:
+                    tickets = tickets.OrderByDescending(t => t.TicketPriorityId);
+                    break;
+            }
+            return tickets;
+        }
+
+        [HttpGet]
+        public ActionResult Index(string orderby)
+        {
+            // all tickets with relevant fields from related tables
+            var tickets = db.Tickets.Include(t => t.AssignedUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType);
+
+            // sort the ticket list
+            tickets = SortTicketsBy(tickets, orderby);
+
+            return View(tickets.ToList());
+        }
+
+        [HttpGet]
+        public ActionResult SubmittedTickets(string orderby)
+        {
+            // instantiate an ApplicationUser from this user's Id
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            // all tickets submitted by this user with relevant fields from related tables 
+            var tickets = db.Tickets.Include(t => t.AssignedUser)
+                .Where(t => t.OwnerUser.Id == user.Id)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType);
+
+            // sort the ticket list
+            tickets = SortTicketsBy(tickets, orderby);
+
+            return View(tickets.ToList());
+        }
+
+        [HttpGet]
+        public ActionResult AssignedTickets(string orderby)
+        {
+            // instantiate an ApplicationUser from this user's Id
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            //all tickets with relevant fields from related tables
+            var tickets = db.Tickets
+                .Where(t => t.AssignedUser.Id == user.Id)
+                .Include(t => t.AssignedUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType);
+
+            return View(tickets.ToList());
+        }
+
         // GET: Tickets
         public ActionResult Index()
         {
-            var urh = new UserRolesHelper();
-            
+            // start with a list of all tickets
             var tickets = db.Tickets.Include(t => t.AssignedUser).Include(t => t.OwnerUser).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
             return View(tickets.ToList());
+        }
+
+        public ActionResult RemoveAssignedUserFromTicket(int ticketId)
+        {
+            var helper = new TicketsHelper();
+            helper.RemoveUserFromTicket(ticketId);
+            return RedirectToAction("Edit", new { id = ticketId });
         }
 
         // GET: Tickets/Details/5

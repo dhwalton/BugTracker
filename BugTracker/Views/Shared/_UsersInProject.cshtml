@@ -1,0 +1,27 @@
+﻿@using BugTracker.Models;
+@model Projects
+
+
+@*@foreach (var user in Model.Users)
+{
+    <div class="user-search">
+
+        @Html.ActionLink("Add", "AddUserToProject", new {ProjectId = Model.ProjectId, UserId = user.Id }, new { @class="addToProject" })
+        @user.FirstName @user.LastName | @user.Displayname | @user.Email
+    </div>
+}*@
+
+<h2>Users Assigned to this Project</h2>
+<table class="user-list">
+    <tr><th>Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td>@user.FirstName @user.LastName</td>
+            <td>@user.Displayname</td>
+            <td>@user.Email</td>
+            <td>@Html.ActionLink("X", "RemoveProjectUser", new { ProjectId = Model.Id, UserId = @user.Id }, new { @class = "removeFromProject" })</td>
+        </tr>
+    }
+</table>
+

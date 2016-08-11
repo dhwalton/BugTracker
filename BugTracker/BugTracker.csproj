@@ -225,7 +225,7 @@
     <Compile Include="Helpers\UserRolesHelper.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\DevPmViewModels.cs" />
+    <Compile Include="Models\ProjectDetailsViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\TicketHistories.cs" />
@@ -317,8 +317,8 @@
     <Content Include="Views\Projects\Edit.cshtml" />
     <Content Include="Views\Projects\Index.cshtml" />
     <Content Include="Views\Shared\_UserRoles.cshtml" />
-    <Content Include="Views\Projects\Developer.cshtml" />
-    <Content Include="Views\Projects\ProjectManager.cshtml" />
+    <Content Include="Views\Projects\___Developer.cshtml" />
+    <Content Include="Views\Projects\___ProjectManager.cshtml" />
     <Content Include="Views\Projects\UserRoles.cshtml" />
     <Content Include="Views\Projects\EditUserRoles.cshtml" />
     <Content Include="Views\Tickets\Create.cshtml" />
@@ -328,6 +328,10 @@
     <Content Include="Views\Tickets\Index.cshtml" />
     <Content Include="Views\Projects\UserManager.cshtml" />
     <Content Include="Views\Shared\_AddUserToProject.cshtml" />
+    <Content Include="Views\Projects\___DeveloperDetails.cshtml" />
+    <Content Include="Views\Shared\_UsersInProject.cshtml" />
+    <Content Include="Views\Tickets\AssignedTickets.cshtml" />
+    <Content Include="Views\Tickets\SubmittedTickets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -13,6 +14,7 @@ namespace BugTracker.Models
             Tickets = new HashSet<Tickets>();
         }
         public int Id { get; set; }
+        [Display(Name = "Project Name")]
         public string Name { get; set; }
 
        public DateTimeOffset StartDate { get; set; }

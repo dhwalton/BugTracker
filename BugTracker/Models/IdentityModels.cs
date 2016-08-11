@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace BugTracker.Models
 {
@@ -22,9 +23,11 @@ namespace BugTracker.Models
 
             // attachments, comments, histories, notifications, projects
         }
-
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
+        [Display(Name = "Display Name")]
         public string Displayname { get; set; }
 
         //public virtual ICollection<Tickets> Tickets { get; set; }

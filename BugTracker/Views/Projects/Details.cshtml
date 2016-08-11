@@ -8,9 +8,18 @@
 <h4>Project Started @Html.DisplayFor(model => model.Project.StartDate)</h4>
 <hr />
 
+@if (!User.IsInRole("Developer"))
+{
+    @Html.Partial("_AddUserToProject")
+    <hr />
+    @Html.Partial("_UsersInProject", Model.Project)
+}
+
+<hr />
+
 @if (Model.AssignedTickets.Count > 0)
 {
-    <h3>Assigned Tickets</h3>
+    <h3>My Assigned Tickets</h3>
     foreach (var ticket in Model.AssignedTickets)
     {
         <div><h4>@ticket.Title</h4><div>@ticket.Description</div></div>
@@ -24,6 +33,7 @@ else
 @if (Model.UnassignedTickets.Count > 0)
 {
     <hr />
+    <h3>Other Tickets</h3>
     foreach (var ticket in Model.UnassignedTickets)
     {
         <div><h4>@ticket.Title</h4><div>@ticket.Description</div></div>

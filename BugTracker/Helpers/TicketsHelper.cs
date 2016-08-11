@@ -16,6 +16,13 @@ public class TicketsHelper
        // userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
     }
 
+    public IQueryable<Tickets> UserTickets(string userId)
+    {
+        var user = db.Users.Find(userId);
+        var tickets = db.Tickets.Where(t => t.AssignedUser == user);
+        return tickets;
+    }
+
     // generate a list of tickets assigned to a user
     public IList<Tickets>TicketsAssignedToUser(string userId)
     {
@@ -56,6 +63,13 @@ public class TicketsHelper
         var user = db.Users.Find(userId);
         var ticket = db.Tickets.Find(ticketId);
         ticket.AssignedUser = user;
+        db.SaveChanges();
+    }
+
+    public void RemoveUserFromTicket(int ticketId)
+    {
+        var ticket = db.Tickets.Find(ticketId);
+        ticket.AssignedUserId = null;
         db.SaveChanges();
     }
 

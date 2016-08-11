@@ -45,23 +45,11 @@
     </div>
 }
 
-<h2>Add Users to this Project</h2>
+
 @Html.Partial("_AddUserToProject", Model.UserList)
+@Html.Partial("_UsersInProject", Model)
 
 
-<h2>Users Assigned to this Project</h2>
-<table class="user-list">
-    <tr><th>Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
-    @foreach (var item in Model.Users)
-    {
-        <tr>
-            <td>@item.FirstName @item.LastName</td>
-            <td>@item.Displayname</td>
-            <td>@item.Email</td>
-            <td>@Html.ActionLink("X","RemoveProjectUser", new {ProjectId = Model.Project.Id, UserId = item.Id }, new { @class = "removeFromProject" })</td>
-        </tr>
-    }
-</table>
 
 <h2>Tickets in this Project</h2>
 <table class="user-list">
@@ -74,7 +62,7 @@
         @Html.ActionLink("Back to List", "Index")
     </div>
 
-@section scripts {
+@*@section scripts {
     <script>
         $('.addToProject').click(function (e) {
             e.preventDefault();
@@ -95,4 +83,4 @@
             });
         });
     </script>
-}
+}*@
