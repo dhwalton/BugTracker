@@ -1,5 +1,5 @@
 ﻿@using BugTracker.Models;
-@model BugTracker.Models.AdminProjectEditModel
+@model BugTracker.Models.ProjectDetailViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -46,8 +46,8 @@
 }
 
 
-@Html.Partial("_AddUserToProject", Model.UserList)
-@Html.Partial("_UsersInProject", Model)
+@Html.Partial("_AddUserToProject", Model)
+@Html.Partial("_UsersInProject", Model.Project)
 
 
 

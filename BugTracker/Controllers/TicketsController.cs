@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using BugTracker.Models;
 using Microsoft.AspNet.Identity;
+using PagedList;
 
 namespace BugTracker.Controllers
 {
@@ -57,9 +58,46 @@ namespace BugTracker.Controllers
             return tickets;
         }
 
-        [HttpGet]
-        public ActionResult Index(string orderby)
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(int? page, string searchStr)
         {
+            ViewBag.UserId = User.Identity.GetUserId();
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+
+            // all tickets with relevant fields from related tables
+            var tickets = db.Tickets.Where(t => t.Description.Contains(searchStr))
+                .Union(db.Tickets.Where(t => t.Title.Contains(searchStr)))
+                .Union(db.Tickets.Where(t => t.Title.Contains(searchStr)))
+                .Union(db.Tickets.Where(t => t.Project.Name.Contains(searchStr)))
+                .Union(db.Tickets.Where(t => t.TicketStatus.Name.Contains(searchStr)))
+                .Union(db.Tickets.Where(t => t.TicketPriority.Name.Contains(searchStr)))
+                .Union(db.Tickets.Where(t => t.TicketType.Name.Contains(searchStr)))
+                .Union(db.Tickets.Where(t => t.AssignedUser.Displayname.Contains(searchStr)))
+                .Union(db.Tickets.Where(t => t.OwnerUser.Displayname.Contains(searchStr)))
+                .Include(t => t.AssignedUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .OrderByDescending(t => t.TicketPriorityId);
+
+            return View(tickets.ToPagedList(pageNumber, pageSize));
+        }
+
+        [HttpGet]
+        public ActionResult OldIndex(int? page, string orderby)
+        {
+            ViewBag.UserId = User.Identity.GetUserId();
+            ViewBag.User = db.Users.Find(User.Identity.GetUserId());
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            
+
             // all tickets with relevant fields from related tables
             var tickets = db.Tickets.Include(t => t.AssignedUser)
                 .Include(t => t.OwnerUser)
@@ -70,7 +108,7 @@ namespace BugTracker.Controllers
             // sort the ticket list
             tickets = SortTicketsBy(tickets, orderby);
 
-            return View(tickets.ToList());
+            return View(tickets.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpGet]
@@ -112,17 +150,37 @@ namespace BugTracker.Controllers
         }
 
         // GET: Tickets
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
+            ViewBag.UserId = User.Identity.GetUserId();
+            ViewBag.User = db.Users.Find(User.Identity.GetUserId());
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+
             // start with a list of all tickets
-            var tickets = db.Tickets.Include(t => t.AssignedUser).Include(t => t.OwnerUser).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-            return View(tickets.ToList());
+            var tickets = db.Tickets
+                .Include(t => t.AssignedUser)
+                .Include(t => t.OwnerUser)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .OrderByDescending(t => t.TicketPriorityId);
+
+            return View(tickets.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult RemoveAssignedUserFromTicket(int ticketId)
         {
             var helper = new TicketsHelper();
             helper.RemoveUserFromTicket(ticketId);
+            return RedirectToAction("Edit", new { id = ticketId });
+        }
+
+        public ActionResult AssignUserToTicket(int ticketId, string userId)
+        {
+            var helper = new TicketsHelper();
+            helper.AddUserToTicket(ticketId, userId);
             return RedirectToAction("Edit", new { id = ticketId });
         }
 
@@ -184,15 +242,34 @@ namespace BugTracker.Controllers
         // GET: Tickets/Edit/5
         public ActionResult Edit(int? id)
         {
+            var uHelper = new UserRolesHelper();
+            var tHelper = new TicketsHelper();
+            var pHelper = new ProjectsHelper();
+            
+            var userId = User.Identity.GetUserId();
+            
+
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            var ticket = db.Tickets.Find(id);
+
+            // kick out devs and PMs who don't meet the criteria to edit this ticket
+            if (!uHelper.IsUserInRole(userId,"Admin") && 
+                ((!uHelper.IsUserInRole(userId, "Project Manager") && !tHelper.UserIsAssignedTicket(id ?? 1, userId))
+                || uHelper.IsUserInRole(userId, "Project Manager") && !pHelper.IsUserOnProject(userId, ticket.Project.Id)))
+            {
+                return RedirectToAction("Index");
+            }
+
             Tickets tickets = db.Tickets.Find(id);
             if (tickets == null)
             {
                 return HttpNotFound();
             }
+
             ViewBag.AssignedUserId = new SelectList(db.Users, "Id", "FirstName", tickets.AssignedUserId);
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", tickets.OwnerUserId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", tickets.TicketPriorityId);

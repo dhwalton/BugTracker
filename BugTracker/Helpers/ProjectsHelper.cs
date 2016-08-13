@@ -52,7 +52,7 @@ public class ProjectsHelper
     }
 
     // get a list of all users assigned to a project
-    public IList<ApplicationUser> UsersNotInProject(int? projectId)
+    public IEnumerable<ApplicationUser> UsersNotInProject(int? projectId)
     {
         if (projectId == null) return null;
         var resultList = new List<ApplicationUser>();

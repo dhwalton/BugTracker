@@ -1,0 +1,32 @@
+﻿@model BugTracker.Models.ProjectDetailViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Html.DisplayFor(model => model.Project.Name)</h2>
+<h4>Project Started @Html.DisplayFor(model => model.Project.StartDate)</h4>
+<hr />
+
+@if (Model.AssignedTickets.Count > 0)
+{
+    <h3>My Assigned Tickets</h3>
+    foreach (var ticket in Model.AssignedTickets)
+    {
+        <div><h4>@ticket.Title</h4><div>@ticket.Description</div></div>
+    }
+}
+else
+{
+    <h4>You have no tickets assigned for this project.</h4>
+}
+
+@if (Model.UnassignedTickets.Count > 0)
+{
+    <hr />
+    <h3>Other Tickets</h3>
+    foreach (var ticket in Model.UnassignedTickets)
+    {
+        <div><h4>@ticket.Title</h4><div>@ticket.Description</div></div>
+    }
+}

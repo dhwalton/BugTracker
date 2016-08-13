@@ -171,3 +171,7 @@ e:\My Documents\GitHub\BugTracker\BugTracker\bin\Microsoft.Owin.Security.Microso
 e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.csprojResolveAssemblyReference.cache
 e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.dll
 e:\My Documents\GitHub\BugTracker\BugTracker\obj\Debug\BugTracker.pdb
+C:\Users\Donny\Documents\Visual Studio 2015\Projects\BugTracker\BugTracker\bin\PagedList.dll
+C:\Users\Donny\Documents\Visual Studio 2015\Projects\BugTracker\BugTracker\bin\PagedList.Mvc.dll
+C:\Users\Donny\Documents\Visual Studio 2015\Projects\BugTracker\BugTracker\bin\PagedList.xml
+C:\Users\Donny\Documents\Visual Studio 2015\Projects\BugTracker\BugTracker\bin\PagedList.Mvc.xml

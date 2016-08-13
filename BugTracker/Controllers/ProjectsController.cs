@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using BugTracker.Models;
 using System.Web.Security;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BugTracker.Controllers
 {
@@ -195,30 +196,34 @@ namespace BugTracker.Controllers
         }
 
         // GET: Projects/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            // instantiate projects helper class
             var projHelper = new ProjectsHelper();
+            var urHelper = new UserRolesHelper();
+            var userId = User.Identity.GetUserId();
 
-            AdminProjectEditModel p = new AdminProjectEditModel();
-            p.Project = db.Projects.Find(id);
-            
-            p.Users = projHelper.UsersInProject(id);
-            var uList = projHelper.UsersNotInProject(id).OrderBy(u => u.LastName);
+            // kick this user back to the index if they aren't assigned to this project and don't have admin rights
+            if (!projHelper.IsUserInProject(userId,id ?? 1) && !urHelper.IsUserInRole(userId,"Admin"))
+            {
+                return RedirectToAction("Index");
+            }
 
-            p.UserList = new ListUsersRolesModel();
-            p.UserList.Users = uList;
-            p.UserList.ProjectId = id ?? 1;
-            
-            if (p == null)
+            // build the view model (see the constructor for this model)
+            var model = new ProjectDetailViewModel(id, userId);    
+
+            if (model == null)
             {
                 return HttpNotFound();
             }
-            return View(p);
+
+            return View(model);
         }
 
         // POST: Projects/Edit/5

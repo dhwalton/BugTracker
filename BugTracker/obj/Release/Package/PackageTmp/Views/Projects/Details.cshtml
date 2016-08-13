@@ -1,34 +1,41 @@
-﻿@model BugTracker.Models.Projects
+﻿@model BugTracker.Models.ProjectDetailViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Html.DisplayFor(model => model.Project.Name)</h2>
+<h4>Project Started @Html.DisplayFor(model => model.Project.StartDate)</h4>
+<hr />
 
-<div>
-    <h4>Projects</h4>
+@if (!User.IsInRole("Developer"))
+{
+    @Html.Partial("_AddUserToProject")
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+    @Html.Partial("_UsersInProject", Model.Project)
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+<hr />
 
-        <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
+@if (Model.AssignedTickets.Count > 0)
+{
+    <h3>My Assigned Tickets</h3>
+    foreach (var ticket in Model.AssignedTickets)
+    {
+        <div><h4>@ticket.Title</h4><div>@ticket.Description</div></div>
+    }
+}
+else
+{
+    <h4>You have no tickets assigned for this project.</h4>
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+@if (Model.UnassignedTickets.Count > 0)
+{
+    <hr />
+    <h3>Other Tickets</h3>
+    foreach (var ticket in Model.UnassignedTickets)
+    {
+        <div><h4>@ticket.Title</h4><div>@ticket.Description</div></div>
+    }
+}

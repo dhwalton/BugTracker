@@ -73,6 +73,17 @@ public class TicketsHelper
         db.SaveChanges();
     }
 
-
-
+    public bool UserIsAssignedTicket(int ticketId, string userId)
+    {
+        var ticket = db.Tickets.Find(ticketId);
+        if (ticket.AssignedUserId == userId)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
 }

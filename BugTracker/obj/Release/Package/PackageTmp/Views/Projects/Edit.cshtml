@@ -1,5 +1,5 @@
 ﻿@using BugTracker.Models;
-@model BugTracker.Models.AdminProjectEditModel
+@model BugTracker.Models.ProjectDetailViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -44,14 +44,43 @@
         </div>
     </div>
 }
-<h2>Users Assigned to this Project</h2>
-<table id="user-list">
-    <tr><th>First Name</th><th>Last Name</th><th>Display Name</th><th>Email</th></tr>
-    @foreach (var item in Model.Users)
+
+
+@Html.Partial("_AddUserToProject", Model)
+@Html.Partial("_UsersInProject", Model.Project)
+
+
+
+<h2>Tickets in this Project</h2>
+<table class="user-list">
+    @foreach (var ticket in Model.Project.Tickets)
     {
-        <tr><td>@item.FirstName</td><td>@item.LastName</td><td>@item.Displayname</td><td>@item.Email</td></tr>
+        <tr><td>@ticket.Title</td></tr>
     }
 </table>
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+@*@section scripts {
+    <script>
+        $('.addToProject').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr("href"),
+                success: function () {
+                    location.reload();
+                }
+            });
+        });
+        $('.removeFromProject').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr("href"),
+                success: function () {
+                    location.reload();
+                }
+            });
+        });
+    </script>
+}*@
