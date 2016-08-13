@@ -1,6 +1,7 @@
 ﻿using BugTracker.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -63,6 +64,7 @@ public class TicketsHelper
         var user = db.Users.Find(userId);
         var ticket = db.Tickets.Find(ticketId);
         ticket.AssignedUser = user;
+        ticket.Updated = DateTimeOffset.Now;
         db.SaveChanges();
     }
 
@@ -70,6 +72,7 @@ public class TicketsHelper
     {
         var ticket = db.Tickets.Find(ticketId);
         ticket.AssignedUserId = null;
+        ticket.Updated = DateTimeOffset.Now;
         db.SaveChanges();
     }
 

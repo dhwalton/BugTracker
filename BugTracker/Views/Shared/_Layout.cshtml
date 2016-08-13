@@ -7,6 +7,7 @@
     @Styles.Render("~/Content/PagedList.css")
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/DataTables/css/jquery.dataTables.min.css")
 
 </head>
 <body>
@@ -40,6 +41,7 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Content/DataTables/js/jquery.dataTables.min.js")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

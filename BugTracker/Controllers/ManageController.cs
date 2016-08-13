@@ -84,6 +84,9 @@ namespace BugTracker.Controllers
 
             var model = new IndexViewModel
             {
+                FirstName = userHelper.GetUserFirstName(userId),
+                LastName = userHelper.GetUserLastName(userId),
+                DisplayName = userHelper.GetUserDisplayName(userId),
                 HasPassword = HasPassword(),
                 PhoneNumber =  UserManager.GetPhoneNumber(userId),
                 TwoFactor =  UserManager.GetTwoFactorEnabled(userId),

@@ -114,6 +114,9 @@ namespace BugTracker.Controllers
         [HttpGet]
         public ActionResult SubmittedTickets(string orderby)
         {
+            ViewBag.UserId = User.Identity.GetUserId();
+            ViewBag.User = db.Users.Find(User.Identity.GetUserId());
+
             // instantiate an ApplicationUser from this user's Id
             var user = db.Users.Find(User.Identity.GetUserId());
 
@@ -132,8 +135,35 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
+        public ActionResult ProjectTickets()
+        {
+            ViewBag.UserId = User.Identity.GetUserId();
+            ViewBag.User = db.Users.Find(User.Identity.GetUserId());
+
+            // instantiate an ApplicationUser from this user's Id
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            // all tickets submitted by this user with relevant fields from related tables 
+            var tickets = db.Tickets.Include(t => t.AssignedUser)
+                .Where(t => t.Project.Users.Any(u => u.Id == user.Id))
+                .Include(t => t.OwnerUser)
+                .Include(t => t.TicketPriority)
+                .Include(t => t.TicketStatus)
+                .Include(t => t.TicketType)
+                .OrderByDescending(t => t.TicketPriorityId);
+
+            // sort the ticket list
+            //tickets = SortTicketsBy(tickets, orderby);
+
+            return View(tickets.ToList());
+        }
+
+        [HttpGet]
         public ActionResult AssignedTickets(string orderby)
         {
+            ViewBag.UserId = User.Identity.GetUserId();
+            ViewBag.User = db.Users.Find(User.Identity.GetUserId());
+
             // instantiate an ApplicationUser from this user's Id
             var user = db.Users.Find(User.Identity.GetUserId());
 
@@ -155,7 +185,7 @@ namespace BugTracker.Controllers
             ViewBag.UserId = User.Identity.GetUserId();
             ViewBag.User = db.Users.Find(User.Identity.GetUserId());
 
-            int pageSize = 5;
+            int pageSize = 50;
             int pageNumber = (page ?? 1);
 
             // start with a list of all tickets
@@ -242,19 +272,19 @@ namespace BugTracker.Controllers
         // GET: Tickets/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             var uHelper = new UserRolesHelper();
             var tHelper = new TicketsHelper();
             var pHelper = new ProjectsHelper();
-            
-            var userId = User.Identity.GetUserId();
-            
 
-            
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            var userId = User.Identity.GetUserId();
             var ticket = db.Tickets.Find(id);
+          
 
             // kick out devs and PMs who don't meet the criteria to edit this ticket
             if (!uHelper.IsUserInRole(userId,"Admin") && 
@@ -287,6 +317,7 @@ namespace BugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                tickets.Updated = DateTimeOffset.Now;
                 db.Entry(tickets).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

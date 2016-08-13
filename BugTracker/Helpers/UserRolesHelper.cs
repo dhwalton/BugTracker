@@ -94,20 +94,21 @@ public class UserRolesHelper
            // return db.SaveChanges();
         }
 
-        public int SetUserLastName(string userId, string newLastName)
+        public IdentityResult SetUserLastName(string userId, string newLastName)
         {
             var user = manager.FindById(userId);
             user.LastName = newLastName;
-            db.Entry(user).State = EntityState.Modified;
-            return db.SaveChanges();
+            //db.Entry(user).State = EntityState.Modified;
+            return manager.Update(user);
         }
 
-        public int SetUserDisplayName(string userId, string newDisplayName)
+        public IdentityResult SetUserDisplayName(string userId, string newDisplayName)
         {
             var user = manager.FindById(userId);
             user.Displayname = newDisplayName;
-            db.Entry(user).State = EntityState.Modified;
-            return db.SaveChanges();
+           // db.Entry(user).State = EntityState.Modified;
+            //return db.SaveChanges();
+            return manager.Update(user);
         }
 
         public IList<ApplicationUser> AllUsers()

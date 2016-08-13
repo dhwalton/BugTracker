@@ -14,10 +14,12 @@ namespace BugTracker.Models
             Tickets = new HashSet<Tickets>();
         }
         public int Id { get; set; }
+
         [Display(Name = "Project Name")]
         public string Name { get; set; }
 
-       public DateTimeOffset StartDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yy, h:mm tt}")]
+        public DateTimeOffset StartDate { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
         public virtual ICollection<Tickets> Tickets { get; set; }

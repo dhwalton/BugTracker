@@ -232,15 +232,18 @@ namespace BugTracker.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,StartDate")] Projects projects)
+        public ActionResult Edit(int id, string name)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(projects).State = EntityState.Modified;
+                var project = db.Projects.Find(id);
+                project.Name = name;
+               
+                db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(projects);
+            return RedirectToAction("Edit", new { id = id });
         }
 
         // GET: Projects/Delete/5

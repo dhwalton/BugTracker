@@ -30,8 +30,10 @@ namespace BugTracker.Models
 
         [Required]
         [Display(Name = "Created On")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yy, h:mm tt}")]
         public DateTimeOffset Created { get; set; }
         [Display(Name = "Updated On")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yy, h:mm tt}")]
         public DateTimeOffset? Updated { get; set; }
         public int ProjectId { get; set; }
         public int TicketTypeId { get; set; }
