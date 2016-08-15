@@ -94,7 +94,7 @@ namespace BugTracker.Controllers
             ViewBag.UserId = User.Identity.GetUserId();
             ViewBag.User = db.Users.Find(User.Identity.GetUserId());
 
-            int pageSize = 5;
+            int pageSize = 15;
             int pageNumber = (page ?? 1);
             
 
@@ -108,7 +108,7 @@ namespace BugTracker.Controllers
             // sort the ticket list
             tickets = SortTicketsBy(tickets, orderby);
 
-            return View(tickets.ToPagedList(pageNumber, pageSize));
+            return View(tickets);
         }
 
         [HttpGet]

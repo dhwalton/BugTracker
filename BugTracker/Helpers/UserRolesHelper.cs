@@ -15,6 +15,12 @@ public class UserRolesHelper
         return manager.IsInRole(userId, roleName);
     }
 
+    public IList<IdentityRole> ListAllRoles()
+    {
+        return db.Roles.ToList();
+    }
+
+
     public ICollection<string> ListUserRoles(string userId)
     {
         return manager.GetRoles(userId);

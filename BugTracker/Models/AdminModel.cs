@@ -7,6 +7,20 @@ using System.Web.Mvc;
 
 namespace BugTracker.Models
 {
+    public class UsersAndRolesModel
+    {
+        public UsersAndRolesModel()
+        {
+            var db = new ApplicationDbContext();
+            var urHelper = new UserRolesHelper();
+            Roles = urHelper.ListAllRoles();
+            Users = db.Users.ToList();
+        }
+
+        public IList<ApplicationUser> Users { get; set; }
+        public IList<IdentityRole> Roles { get; set; }
+    }
+
     public class AdminUserViewModel
     {
         public ApplicationUser User { get; set; }

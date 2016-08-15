@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<BugTracker.Models.Tickets>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Old Index (Column Sort in Action Method)";
 }
 
 <h2>Index</h2>
@@ -16,34 +16,34 @@
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.TicketPriority.Name).ToString(), "AssignedTickets", new { orderby = "priority" })
+            @Html.ActionLink(Html.DisplayNameFor(model => model.TicketPriority.Name).ToString(), "OldIndex", new { orderby = "priority" })
         </th>
         <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Updated).ToString(), "AssignedTickets", new { orderby = "updated" })
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Updated).ToString(), "OldIndex", new { orderby = "updated" })
         </th>
         <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.TicketStatus.Name).ToString(), "AssignedTickets", new { orderby = "status" })
+            @Html.ActionLink(Html.DisplayNameFor(model => model.TicketStatus.Name).ToString(), "OldIndex", new { orderby = "status" })
         </th>
         <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Project.Name).ToString(), "AssignedTickets", new { orderby = "project" })
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Project.Name).ToString(), "OldIndex", new { orderby = "project" })
         </th>
         <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.TicketType.Name).ToString(), "AssignedTickets", new { orderby = "type" })
+            @Html.ActionLink(Html.DisplayNameFor(model => model.TicketType.Name).ToString(), "OldIndex", new { orderby = "type" })
         </th>
         <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Title).ToString(), "AssignedTickets", new { orderby = "title" })
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Title).ToString(), "OldIndex", new { orderby = "title" })
         </th>
         <th>
-            @Html.ActionLink("Assigned To", "AssignedTickets", new { orderby = "assigned" })
+            @Html.ActionLink("Assigned To", "OldIndex", new { orderby = "assigned" })
             @*@Html.DisplayNameFor(model => model.AssignedUser.Displayname)*@
         </th>
 
         <th>
-            @Html.ActionLink("Submitted By", "AssignedTickets", new { orderby = "submitted" })
+            @Html.ActionLink("Submitted By", "OldIndex", new { orderby = "submitted" })
             @*@Html.DisplayNameFor(model => model.OwnerUser.Displayname)*@
         </th>
         <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Created).ToString(), "AssignedTickets", new { orderby = "created" })
+            @Html.ActionLink(Html.DisplayNameFor(model => model.Created).ToString(), "OldIndex", new { orderby = "created" })
         </th>
 
         <th></th>
@@ -61,7 +61,7 @@
             @Html.DisplayFor(modelItem => item.TicketStatus.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Project.Name)
+            @Html.DisplayFor(item.Project.Name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.TicketType.Name)

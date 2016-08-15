@@ -50,8 +50,8 @@ namespace BugTracker.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult UserManager()
         {
-            var users = db.Users.ToList().OrderBy(u => u.LastName);
-            return View(users);
+            var model = new UsersAndRolesModel();
+            return View(model);
         }
 
         // partial view for listing all users for the purpose of adding to a project
