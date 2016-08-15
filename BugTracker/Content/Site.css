@@ -35,3 +35,15 @@ textarea {
 #user-list tr:nth-child(odd), .user-list tr:nth-child(odd) {
     background-color: rgba(0,0,0,0.15);
 }
+
+.dev {
+    color: green;
+    font-weight: 700;
+    margin: 0 0.5em;
+}
+
+.pm {
+    color: orangered;
+    font-weight: 700;
+    margin: 0 0.5em;
+}

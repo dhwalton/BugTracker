@@ -1,0 +1,27 @@
+﻿@model BugTracker.Models.Tickets
+
+@if (Model.TicketComments.Count > 0) { 
+    foreach (var comment in Model.TicketComments)
+    {
+        <div>
+            @comment.User.Displayname said:
+            <p>@comment.Comment</p>
+            <p style="font-style:italic">@comment.Created</p>
+        </div>
+    }
+}
+else
+{
+    <h4>No commments left on this ticket</h4>
+}
+<div>
+    Leave a comment:
+    @using (Html.BeginForm("LeaveComment","TicketComments"))
+    {
+        @Html.AntiForgeryToken();
+        
+        <input type="hidden" name="ticketId" value="@Model.Id" />
+        @Html.TextArea("commentText")
+        <input type="submit" class="form-control" value="Leave Comment" />
+    }
+</div>

@@ -23,6 +23,29 @@ namespace BugTracker.Models
 
             // attachments, comments, histories, notifications, projects
         }
+
+        // is user a PM?
+        public bool isPM()
+        {
+            var h = new UserRolesHelper();
+            return h.IsUserInRole(Id, "Project Manager");
+        }
+
+        public bool inRole(string roleName)
+        {
+            var h = new UserRolesHelper();
+            return h.IsUserInRole(Id, roleName);
+        }
+
+        // is user a Developer?
+        public bool isDev()
+        {
+            var h = new UserRolesHelper();
+            return h.IsUserInRole(Id, "Developer");
+        }
+
+         
+
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]

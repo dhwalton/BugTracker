@@ -14,13 +14,40 @@
                 @using (Html.BeginForm())
                 {
                     @Html.AntiForgeryToken();
-                    @Html.HiddenFor(modelItem => item.Id)
-                    foreach (var role in Model.Roles)
-                    {
-                        @role.Name <input type="checkbox" name="@role.Name"  />
-                    }
+                    @Html.HiddenFor(modelItem => item.Id, new { uid="uid" })
+
+                    @Html.CheckBox("Admin", item.inRole("Admin"), new { @class = "role" }) 
+                    <span>Admin</span>
+
+                    @Html.CheckBox("Project Manager", item.inRole("Project Manager"), new { @class = "role" })
+                    <span>Project Manager</span>
+
+                    @Html.CheckBox("Developer", item.inRole("Developer"), new { @class = "role" })
+                    <span>Developer</span>
+
+                    @Html.CheckBox("Submitter", item.inRole("Submitter"), new { @class = "role" })
+                    <span>Submitter</span>
                 }
             </td>
        </tr>
     }
 </table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('.role').change(function () {
+                var url = "/Projects/ChangeUserRole";
+                var uId = $(this).siblings[0].val();
+                if (this.checked) {
+                    //$.get(url, { input: name }, function (data) {
+                    //    $("#rData").html(data);
+                    //}
+                } else {
+                    //console.log("UNCHECKED");
+                }
+            });
+        });
+    </script>
+    
+}

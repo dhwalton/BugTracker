@@ -2,13 +2,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
 namespace BugTracker.Models
 {
+    public class UserWithRoles
+    {
+        public UserWithRoles(string userId)
+        {
+            User = helper.GetUserById(userId);
+            RoleList = helper.UserRolesString(userId);
+
+        }
+        private StringBuilder sb = new StringBuilder();
+        private UserRolesHelper helper = new UserRolesHelper();
+        public ApplicationUser User { get; set; }
+        public String RoleList { get; set; }
+    }
+
     public class UsersAndRolesModel
     {
+
         public UsersAndRolesModel()
         {
             var db = new ApplicationDbContext();
@@ -16,9 +32,10 @@ namespace BugTracker.Models
             Roles = urHelper.ListAllRoles();
             Users = db.Users.ToList();
         }
-
+        
         public IList<ApplicationUser> Users { get; set; }
         public IList<IdentityRole> Roles { get; set; }
+        public string[] SelectedRoles { get; set; }
     }
 
     public class AdminUserViewModel

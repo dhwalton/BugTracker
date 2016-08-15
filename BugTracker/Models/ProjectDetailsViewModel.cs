@@ -44,12 +44,14 @@ namespace BugTracker.Models
 
                 // a null list means this user is not an Admin/PM, they will not have access to
                 // the ability to add/remove users from projects
-                if (usersInProperRoles != null) { 
-                    // join the users not in project with those in proper roles to the users in proper roles
+                if (usersInProperRoles != null)
+                { 
+                    // join the users not in project with those in proper roles
                     UsersNotInProject = from user1 in helper.UsersNotInProject(projectId ?? 1)
                                         join user2 in usersInProperRoles
                                         on user1.Id equals user2.Id
                                         select user1;
+                    
                 }
                 
             }

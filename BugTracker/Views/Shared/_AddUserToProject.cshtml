@@ -7,7 +7,15 @@
         <div class="user-search">
             @*<input type="checkbox" class="cb" id="@user.Id" />*@ 
             @Html.ActionLink("Add", "AddUserToProject", new {ProjectId = Model.Project.Id, UserId = user.Id }, new { @class="addToProject" })
-            @user.FirstName @user.LastName | @user.Displayname | @user.Email
+            @if (user.isPM()) 
+            {
+                <span class="pm">PM</span> 
+            }
+            @if (user.isDev()) 
+            {
+                <span class="dev">Dev</span> 
+            }
+            @user.Displayname | @user.Email
         </div>
 
 }

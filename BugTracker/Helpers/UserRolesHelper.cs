@@ -4,11 +4,24 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Text;
 
 public class UserRolesHelper
 {
     private UserManager<ApplicationUser> manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
     private ApplicationDbContext db = new ApplicationDbContext();
+
+    public string UserRolesString(string userId)
+    {
+        var sb = new StringBuilder();
+        var roles = ListUserRoles(userId);
+        foreach (var role in roles)
+        {
+            sb.Append(role);
+            sb.Append(",");
+        }
+        return sb.ToString();
+    }
 
     public bool IsUserInRole(string userId, string roleName)
     {
@@ -72,7 +85,7 @@ public class UserRolesHelper
         return resultList;
     }
 
-
+   
 
         // Some methods to help with getting/setting user fields
         public string GetUserFirstName(string userId)
@@ -131,5 +144,7 @@ public class UserRolesHelper
         {
             return manager.FindByName(Name);
         }
+
+
 
 }

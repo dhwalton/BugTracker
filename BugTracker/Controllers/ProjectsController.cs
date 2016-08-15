@@ -94,6 +94,20 @@ namespace BugTracker.Controllers
             return View(AdminModel);
         }
 
+        [Authorize(Roles = "Admin")]
+        public void ChangeUserRole(string userId, string roleName, bool addRole)
+        {
+            var helper = new UserRolesHelper();
+            if (addRole)
+            { 
+                helper.AddUserToRole(userId, roleName);
+            }
+            else
+            {
+                helper.RemoveUserFromRole(userId, roleName);
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -203,6 +217,9 @@ namespace BugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            // testing something...
+            var thisUser = new UserWithRoles(User.Identity.GetUserId());
 
             // instantiate projects helper class
             var projHelper = new ProjectsHelper();
