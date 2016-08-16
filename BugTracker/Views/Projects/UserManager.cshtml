@@ -17,19 +17,19 @@
                         @using (Html.BeginForm())
                 {
                             @Html.AntiForgeryToken();
-                            @Html.HiddenFor(modelItem => user.Id, new { uid = "uid" })
+                            @Html.HiddenFor(modelItem => user.Id)
 
-                            @Html.CheckBox("Admin", user.inRole("Admin"), new { @class = "role" })
-                            <span>Admin</span>
+                            @Html.CheckBox("Admin", user.inRole("Admin"), new { @class = "role-ctrl" })
+                            <span class="role">Admin</span>
 
-                            @Html.CheckBox("Project Manager", user.inRole("Project Manager"), new { @class = "role" })
-                            <span>Project Manager</span>
+                            @Html.CheckBox("Project Manager", user.inRole("Project Manager"), new { @class = "role-ctrl" })
+                            <span class="role">Project Manager</span>
 
-                            @Html.CheckBox("Developer", user.inRole("Developer"), new { @class = "role" })
-                            <span>Developer</span>
+                            @Html.CheckBox("Developer", user.inRole("Developer"), new { @class = "role-ctrl" })
+                            <span class="role">Developer</span>
 
-                            @Html.CheckBox("Submitter", user.inRole("Submitter"), new { @class = "role" })
-                            <span>Submitter</span>
+                            @Html.CheckBox("Submitter", user.inRole("Submitter"), new { @class = "role-ctrl" })
+                            <span class="role">Submitter</span>
                         }
                     </td>
                 </tr>
@@ -41,11 +41,13 @@
     <script>
         $(document).ready(function () {
             $('#user-list').DataTable();
-            $('.role').change(function () {
+            $('.role-ctrl').change(function () {
                 var url = "/Projects/ChangeUserRole";
-                var uId = $(this).parent().find("#item_Id").val();
+                var uId = $(this).parent().find("#user_Id").val();
                 var role = $(this).attr("name");
-
+                console.log(url);
+                console.log(uId);
+                console.log(role);
                 if (this.checked) {
                     $.get(url, { userId: uId, roleName: role, addRole: true }, function () {
 

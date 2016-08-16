@@ -69,7 +69,7 @@ namespace BugTracker.Controllers
         {
             var helper = new ProjectsHelper();
             helper.AddUserToProject(projectId, userId);
-            return RedirectToAction("Details", new { id=projectId});
+            return RedirectToAction("Edit", new { id = projectId});
         }
 
         [Authorize(Roles = "Admin, Project Manager")]
@@ -78,7 +78,7 @@ namespace BugTracker.Controllers
         {
             var helper = new ProjectsHelper();
             helper.RemoveUserFromProject(model.ProjectId, model.UserId);
-            return RedirectToAction("Details", new { id = model.ProjectId });
+            return RedirectToAction("Edit", new { id = model.ProjectId });
         }
 
 
@@ -184,7 +184,7 @@ namespace BugTracker.Controllers
         }
 
         // GET: Projects/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult Create()
         {
             return View();
@@ -193,13 +193,19 @@ namespace BugTracker.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Project Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name")] Projects projects)
         {
             if (ModelState.IsValid)
             {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                if (User.IsInRole("Project Manager"))
+                {
+                    // project creators in the PM role are auto-assigned to the project
+                    projects.Users.Add(user);
+                }
                 projects.StartDate = DateTimeOffset.Now;
                 db.Projects.Add(projects);
                 db.SaveChanges();
