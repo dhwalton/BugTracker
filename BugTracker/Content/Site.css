@@ -47,3 +47,7 @@ textarea {
     font-weight: 700;
     margin: 0 0.5em;
 }
+
+#userlist-container {
+    margin-top: 1em;
+}

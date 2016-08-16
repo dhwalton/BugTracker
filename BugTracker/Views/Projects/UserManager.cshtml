@@ -1,50 +1,59 @@
 ﻿@using BugTracker.Models;
 @model UsersAndRolesModel
-
-<table id="user-list">
-    <tr><th>Email</th><th>First Name</th><th>Last Name</th><th>Display Name</th><th>Roles</th></tr>
-    @foreach (var item in Model.Users)
-    {
-        <tr>
-            <td>@item.Email</td>
-            <td>@item.FirstName</td>
-            <td>@item.LastName</td>
-            <td>@item.Displayname</td>
-            <td>
-                @using (Html.BeginForm())
+<div id="userlist-container">
+    <table id="user-list">
+        <thead>
+            <tr><th>Email</th><th>First Name</th><th>Last Name</th><th>Display Name</th><th>Roles</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Displayname</td>
+                    <td>
+                        @using (Html.BeginForm())
                 {
-                    @Html.AntiForgeryToken();
-                    @Html.HiddenFor(modelItem => item.Id, new { uid="uid" })
+                            @Html.AntiForgeryToken();
+                            @Html.HiddenFor(modelItem => user.Id, new { uid = "uid" })
 
-                    @Html.CheckBox("Admin", item.inRole("Admin"), new { @class = "role" }) 
-                    <span>Admin</span>
+                            @Html.CheckBox("Admin", user.inRole("Admin"), new { @class = "role" })
+                            <span>Admin</span>
 
-                    @Html.CheckBox("Project Manager", item.inRole("Project Manager"), new { @class = "role" })
-                    <span>Project Manager</span>
+                            @Html.CheckBox("Project Manager", user.inRole("Project Manager"), new { @class = "role" })
+                            <span>Project Manager</span>
 
-                    @Html.CheckBox("Developer", item.inRole("Developer"), new { @class = "role" })
-                    <span>Developer</span>
+                            @Html.CheckBox("Developer", user.inRole("Developer"), new { @class = "role" })
+                            <span>Developer</span>
 
-                    @Html.CheckBox("Submitter", item.inRole("Submitter"), new { @class = "role" })
-                    <span>Submitter</span>
-                }
-            </td>
-       </tr>
-    }
-</table>
-
+                            @Html.CheckBox("Submitter", user.inRole("Submitter"), new { @class = "role" })
+                            <span>Submitter</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 @section scripts {
     <script>
         $(document).ready(function () {
+            $('#user-list').DataTable();
             $('.role').change(function () {
                 var url = "/Projects/ChangeUserRole";
-                var uId = $(this).siblings[0].val();
+                var uId = $(this).parent().find("#item_Id").val();
+                var role = $(this).attr("name");
+
                 if (this.checked) {
-                    //$.get(url, { input: name }, function (data) {
-                    //    $("#rData").html(data);
-                    //}
+                    $.get(url, { userId: uId, roleName: role, addRole: true }, function () {
+
+                    });
                 } else {
-                    //console.log("UNCHECKED");
+                    $.get(url, { userId: uId, roleName: role, addRole: false }, function () {
+
+                    });
                 }
             });
         });

@@ -135,25 +135,25 @@ namespace BugTracker.Controllers
             return RedirectToAction("UserRoles");
         }
 
-        [Authorize(Roles = "Admin,Developer")]
-        public ActionResult Developer()
-        {
-            //var ph = new ProjectsHelper(db);
-            //var projects = ph.ProjectsAssignedToUser(User.Identity.Name);
-            var uh = new UserRolesHelper();
-            ViewBag.CurrentUser = uh.GetUserByName(User.Identity.Name);
+        //[Authorize(Roles = "Admin,Developer")]
+        //public ActionResult Developer()
+        //{
+        //    //var ph = new ProjectsHelper(db);
+        //    //var projects = ph.ProjectsAssignedToUser(User.Identity.Name);
+        //    var uh = new UserRolesHelper();
+        //    ViewBag.CurrentUser = uh.GetUserByName(User.Identity.Name);
             
-            return View(db.Projects.ToList());
-        }
+        //    return View(db.Projects.ToList());
+        //}
 
-        [Authorize(Roles = "Admin,Project Manager")]
-        public ActionResult ProjectManager()
-        {
-            var uh = new UserRolesHelper();
-            ViewBag.CurrentUser = uh.GetUserByName(User.Identity.Name);
+        //[Authorize(Roles = "Admin,Project Manager")]
+        //public ActionResult ProjectManager()
+        //{
+        //    var uh = new UserRolesHelper();
+        //    ViewBag.CurrentUser = uh.GetUserByName(User.Identity.Name);
 
-            return View(db.Projects.ToList());
-        }
+        //    return View(db.Projects.ToList());
+        //}
 
         // GET: Projects/Details/5
         [Authorize (Roles = "Admin, Project Manager, Developer")]
@@ -217,9 +217,6 @@ namespace BugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            // testing something...
-            var thisUser = new UserWithRoles(User.Identity.GetUserId());
 
             // instantiate projects helper class
             var projHelper = new ProjectsHelper();
