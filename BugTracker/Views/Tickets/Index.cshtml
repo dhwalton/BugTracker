@@ -8,29 +8,12 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create") | @Html.ActionLink("My Assigned Tickets","AssignedTickets") | @Html.ActionLink("Tickets for My Projects", "ProjectTickets")
-    @if (User.IsInRole("Submitter"))
-    {
-        <span>|</span> @Html.ActionLink("My Submitted Tickets", "SubmittedTickets")
-    }
+@Html.Partial("_TicketNav")
 
-    | 
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken();
-        @Html.Label("Search")
-        <span>&nbsp;</span>
-        @Html.TextBox("searchStr")
-        <input type="submit" value="Go" />
-    }
-</p>
 <table class="table" id="data-table">
     <thead>
         <tr>
-            <th>
-                Prioirity
-            </th>
+            <th>Prioirity</th>
             <th>
                 Updated
             </th>
@@ -90,6 +73,7 @@
                 @Html.DisplayFor(modelItem => item.Created)
             </td>
             <td>
+               
                 @if (ViewBag.UserId == item.AssignedUserId || User.IsInRole("Admin") || (User.IsInRole("Project Manager") && item.Project.Users.Contains(ViewBag.User)))
                 {
                     @Html.ActionLink("Edit", "Edit", new { id=item.Id })
@@ -109,10 +93,10 @@
     }
     </tbody>
 </table>
-<div id="paging">
+@*<div id="paging">
     <span>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</span>
     <span>@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))</span>
-</div>
+</div>*@
 @section scripts {
     @Scripts.Render("~/js/PrioritySort.js")
     <script>

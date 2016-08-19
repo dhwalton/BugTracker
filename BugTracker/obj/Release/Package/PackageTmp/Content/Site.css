@@ -32,6 +32,26 @@ textarea {
     padding: 0.5em;
 }
 
-#user-list tr:nth-child(odd), .user-list tr:nth-child(odd) {
-    background-color: rgba(0,0,0,0.15);
+#user-list tr:nth-child(even), .user-list tr:nth-child(even) {
+    background-color: rgba(255, 216, 0,0.5);
+}
+
+.dev {
+    color: green;
+    font-weight: 700;
+    margin: 0 0.5em;
+}
+
+.pm {
+    color: orangered;
+    font-weight: 700;
+    margin: 0 0.5em;
+}
+
+#userlist-container {
+    margin-top: 1em;
+}
+
+.role {
+    padding: 0 0.75em 0 0;
 }

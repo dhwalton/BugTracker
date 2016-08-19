@@ -1,5 +1,5 @@
 ﻿@using BugTracker.Models;
-@model Projects
+@model ProjectDetailViewModel
 
 
 @*@foreach (var user in Model.Users)
@@ -14,15 +14,42 @@
 <h2>Users Assigned to this Project</h2>
 <table class="user-list">
     <tr><th>Role(s)</th><th>Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
-    @foreach (var user in Model.Users)
+    @if (Model.Project.ManagerId != null)
     {
         <tr>
             <td>
-                @if (user.isPM())
+                @if (Model.Manager.IsPM())
                 {
                     <span class="pm">PM</span>
                 }
-                @if (user.isDev())
+                @if (Model.Manager.IsDev())
+                {
+                    <span class="dev">Dev</span>
+                }
+            </td>
+            <td>
+                @Model.Manager.FirstName @Model.Manager.LastName
+            </td>
+            <td>
+                @Model.Manager.Displayname
+            </td>
+            <td>
+                @Model.Manager.Email
+            </td>
+            <td>
+                
+            </td>
+       </tr>
+    }
+    @foreach (var user in Model.Project.Users.Where(u => u.Id != Model.Project.ManagerId))
+    {
+        <tr>
+            <td>
+                @*@if (user.IsPM())
+                {
+                    <span class="pm">PM</span>
+                }*@
+                @if (user.IsDev())
                 {
                     <span class="dev">Dev</span>
                 }
@@ -30,7 +57,7 @@
             <td>@user.FirstName @user.LastName</td>
             <td>@user.Displayname</td>
             <td>@user.Email</td>
-            <td>@Html.ActionLink("X", "RemoveProjectUser", new { ProjectId = Model.Id, UserId = @user.Id }, new { @class = "removeFromProject" })</td>
+            <td>@Html.ActionLink("X", "RemoveProjectUser", new { ProjectId = Model.Project.Id, UserId = @user.Id }, new { @class = "removeFromProject" })</td>
         </tr>
     }
 </table>

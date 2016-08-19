@@ -13,10 +13,20 @@
 
 <h2>Users Assigned to this Project</h2>
 <table class="user-list">
-    <tr><th>Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
+    <tr><th>Role(s)</th><th>Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
     @foreach (var user in Model.Users)
     {
         <tr>
+            <td>
+                @if (user.isPM())
+                {
+                    <span class="pm">PM</span>
+                }
+                @if (user.isDev())
+                {
+                    <span class="dev">Dev</span>
+                }
+            </td>
             <td>@user.FirstName @user.LastName</td>
             <td>@user.Displayname</td>
             <td>@user.Email</td>

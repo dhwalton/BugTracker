@@ -9,7 +9,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create") | @Html.ActionLink("My Assigned Tickets","AssignedTickets")
+    @Html.ActionLink("Create New", "Create") | @Html.ActionLink("My Assigned Tickets","AssignedTickets") | @Html.ActionLink("Tickets for My Projects", "ProjectTickets")
     @if (User.IsInRole("Submitter"))
     {
         <span>|</span> @Html.ActionLink("My Submitted Tickets", "SubmittedTickets")
@@ -25,118 +25,99 @@
         <input type="submit" value="Go" />
     }
 </p>
-<table class="table">
-    <tr>
-        @*<th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.TicketPriority.Name).ToString(), "Index", new { orderby = "priority" })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Updated).ToString(), "Index", new { orderby = "updated" })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.TicketStatus.Name).ToString(), "Index", new { orderby = "status" })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Project.Name).ToString(), "Index", new { orderby = "project" })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.TicketType.Name).ToString(), "Index", new { orderby = "type" })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Title).ToString(), "Index", new { orderby = "title" })
-        </th>
-        <th>
-            @Html.ActionLink("Assigned To", "Index", new { orderby = "assigned" })
-        </th>
+<table class="table" id="data-table">
+    <thead>
+        <tr>
+            <th>
+                Prioirity
+            </th>
+            <th>
+                Updated
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Assigned To
+            </th>
 
-        <th>
-            @Html.ActionLink("Submitted By", "Index", new { orderby = "submitted" })
-        </th>
-        <th>
-            @Html.ActionLink(Html.DisplayNameFor(model => model.Created).ToString(), "Index", new { orderby = "created" })
-        </th>*@
-        <th>
-            @Html.ActionLink("Priority", "Index", new { orderby = "priority" })
-        </th>
-        <th>
-            @Html.ActionLink("Updated", "Index", new { orderby = "updated" })
-        </th>
-        <th>
-            @Html.ActionLink("Status", "Index", new { orderby = "status" })
-        </th>
-        <th>
-            @Html.ActionLink("Name", "Index", new { orderby = "project" })
-        </th>
-        <th>
-            @Html.ActionLink("Type", "Index", new { orderby = "type" })
-        </th>
-        <th>
-            @Html.ActionLink("Title", "Index", new { orderby = "title" })
-        </th>
-        <th>
-            @Html.ActionLink("Assigned To", "Index", new { orderby = "assigned" })
-        </th>
+            <th>
+                Submitted By
+            </th>
+            <th>
+                Created
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td class="ticket-priority">
+                @Html.DisplayFor(modelItem => item.TicketPriority.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketStatus.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Project.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketType.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignedUser.Displayname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OwnerUser.Displayname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                @if (ViewBag.UserId == item.AssignedUserId || User.IsInRole("Admin") || (User.IsInRole("Project Manager") && item.Project.Users.Contains(ViewBag.User)))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id })
+                }
+                else
+                {
+                    @Html.ActionLink("Details", "Details", new { id = item.Id })
+                }
 
-        <th>
-            @Html.ActionLink("Submitted By", "Index", new { orderby = "submitted" })
-        </th>
-        <th>
-            @Html.ActionLink("Created", "Index", new { orderby = "created" })
-        </th>
-
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TicketPriority.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Updated)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TicketStatus.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Project.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TicketType.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AssignedUser.Displayname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OwnerUser.Displayname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Created)
-        </td>
-        <td>
-            @if (ViewBag.UserId == item.AssignedUserId || User.IsInRole("Admin") || (User.IsInRole("Project Manager") && item.Project.Users.Contains(ViewBag.User)))
-            {
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id })
-            }
-            else
-            {
-                @Html.ActionLink("Details", "Details", new { id = item.Id })
-            }
-
-            @if (User.IsInRole("Admin"))
-            {
-                <span>|</span>
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-            }
-        </td>
-    </tr>
-}
-
+                @if (User.IsInRole("Admin"))
+                {
+                    <span>|</span>
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
 </table>
 <div id="paging">
     <span>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</span>
     <span>@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))</span>
 </div>
+@section scripts {
+    @Scripts.Render("~/js/PrioritySort.js")
+    <script>
+        $(document).ready(function () {
+            $('#data-table').DataTable();
+        });
+    </script>
+}

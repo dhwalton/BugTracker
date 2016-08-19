@@ -29,11 +29,12 @@ namespace BugTracker.Controllers
             // check to see if this user isn't an admin
             if (!User.IsInRole("Admin"))
             {
-                // make an ApplicationUser from this user's Id
-                var user = db.Users.Find(User.Identity.GetUserId());
+                // get this user's id
+                var userId = User.Identity.GetUserId();
 
-                // filter the project list to only projects assigned to this user
-                projects = projects.Where(p => p.Users.Contains(user)).ToList();
+
+                // filter the project list to only projects managed by this user
+                projects = projects.Where(p => p.ManagerId == userId).ToList();
             }
                     
             return View(projects);
@@ -67,8 +68,17 @@ namespace BugTracker.Controllers
         [Authorize(Roles = "Admin, Project Manager")]
         public ActionResult AddUserToProject(string userId, int projectId)
         {
+            var user = db.Users.Find(userId);
             var helper = new ProjectsHelper();
+
+            // assigns a manager to a project if one isn't there already
+            if (helper.ManagerOfProject(projectId) == null && user.IsPM())
+            {
+                helper.AssignManagerToProject(projectId, userId);
+            }
+
             helper.AddUserToProject(projectId, userId);
+            
             return RedirectToAction("Edit", new { id = projectId});
         }
 
@@ -85,6 +95,7 @@ namespace BugTracker.Controllers
         public ActionResult EditUserRoles(string id)
         {
             var user = db.Users.Find(id);
+            
             AdminUserViewModel AdminModel = new AdminUserViewModel();
             UserRolesHelper helper = new UserRolesHelper();
             var selected = helper.ListUserRoles(id);
@@ -94,10 +105,30 @@ namespace BugTracker.Controllers
             return View(AdminModel);
         }
 
+
+        [Authorize (Roles = "Admin")]
+        public ActionResult ChangeProjectManager(string userId, int projectId)
+        {
+            var h = new ProjectsHelper();
+            
+            // a null userId means that the PM is removed from the project
+            if (userId == null)
+            {
+                // remove the user from the project list of users
+                h.RemoveUserFromProject(projectId, h.GetManagerForProject(projectId).Id);
+            }
+
+            // assign (or remove) the manager
+            h.AssignManagerToProject(projectId, userId);
+
+            return RedirectToAction("Edit", new { id = projectId });
+        }
+
         [Authorize(Roles = "Admin")]
         public void ChangeUserRole(string userId, string roleName, bool addRole)
         {
-            var helper = new UserRolesHelper();
+
+            UserRolesHelper helper = new UserRolesHelper();
             if (addRole)
             { 
                 helper.AddUserToRole(userId, roleName);
@@ -204,7 +235,7 @@ namespace BugTracker.Controllers
                 if (User.IsInRole("Project Manager"))
                 {
                     // project creators in the PM role are auto-assigned to the project
-                    projects.Users.Add(user);
+                    //projects.Manager = user;
                 }
                 projects.StartDate = DateTimeOffset.Now;
                 db.Projects.Add(projects);
@@ -228,6 +259,9 @@ namespace BugTracker.Controllers
             var projHelper = new ProjectsHelper();
             var urHelper = new UserRolesHelper();
             var userId = User.Identity.GetUserId();
+            
+
+            
 
             // kick this user back to the index if they aren't assigned to this project and don't have admin rights
             if (!projHelper.IsUserInProject(userId,id ?? 1) && !urHelper.IsUserInRole(userId,"Admin"))

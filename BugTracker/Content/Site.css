@@ -55,3 +55,21 @@ textarea {
 .role {
     padding: 0 0.75em 0 0;
 }
+
+.remove-manager {
+    font-size: 0.6em;
+    padding: 0.1em 0.3em;
+    border: 1px solid;
+    border-radius: 0.3em;
+    background-color: red;
+    
+}
+
+.remove-manager a {
+    color: #fff;
+    font-weight: 700;
+}
+
+.ticket-nav a {
+    margin-right: 2em;
+}

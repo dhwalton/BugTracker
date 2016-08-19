@@ -25,26 +25,60 @@ namespace BugTracker.Models
         }
 
         // is user a PM?
-        public bool isPM()
+        public bool IsPM()
         {
             var h = new UserRolesHelper();
             return h.IsUserInRole(Id, "Project Manager");
         }
 
+        // is user a Developer?
+        public bool IsDev()
+        {
+            var h = new UserRolesHelper();
+            return h.IsUserInRole(Id, "Developer");
+        }
+
+        // is user in a specified role?
         public bool inRole(string roleName)
         {
             var h = new UserRolesHelper();
             return h.IsUserInRole(Id, roleName);
         }
 
-        // is user a Developer?
-        public bool isDev()
+        // is this user a manager of a specified project?
+        public bool ManagerOfProject(int projectId)
         {
-            var h = new UserRolesHelper();
-            return h.IsUserInRole(Id, "Developer");
+            var h = new ProjectsHelper();
+            if (h.ManagerOfProject(projectId) == Id)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-         
+        // is this user part of a specified project?
+        public bool OnProject(int projectId)
+        {
+            var h = new ProjectsHelper();
+            return h.IsUserInProject(Id, projectId);
+        }
+
+        // Does this user own a specified ticket?
+        public bool OwnsTicket(int ticketId)
+        {
+            var h = new TicketsHelper();
+            return h.UserOwnsTicket(ticketId, Id);
+        }
+
+        // Is this user assigned to a specified ticket?
+        public bool AssignedTicket(int ticketId)
+        {
+            var h = new TicketsHelper();
+            return h.UserIsAssignedTicket(ticketId, Id);
+        }
 
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

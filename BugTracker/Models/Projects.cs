@@ -12,6 +12,8 @@ namespace BugTracker.Models
         {
             Users = new HashSet<ApplicationUser>();
             Tickets = new HashSet<Tickets>();
+
+            
         }
         public int Id { get; set; }
 
@@ -20,7 +22,9 @@ namespace BugTracker.Models
 
         [DisplayFormat(DataFormatString = "{0:MM/dd/yy, h:mm tt}")]
         public DateTimeOffset StartDate { get; set; }
+        public string ManagerId { get; set; }
 
+        //public virtual ApplicationUser Manager { get; set; }
         public virtual ICollection<ApplicationUser> Users { get; set; }
         public virtual ICollection<Tickets> Tickets { get; set; }
     }

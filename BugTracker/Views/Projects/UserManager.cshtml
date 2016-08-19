@@ -1,5 +1,6 @@
 ﻿@using BugTracker.Models;
 @model UsersAndRolesModel
+<h4>Edit a user's roles by clicking the checkboxes next to his or her name.</h4>
 <div id="userlist-container">
     <table id="user-list">
         <thead>
@@ -45,20 +46,8 @@
                 var url = "/Projects/ChangeUserRole";
                 var uId = $(this).parent().find("#user_Id").val();
                 var role = $(this).attr("name");
-                console.log(url);
-                console.log(uId);
-                console.log(role);
-                if (this.checked) {
-                    $.get(url, { userId: uId, roleName: role, addRole: true }, function () {
-
-                    });
-                } else {
-                    $.get(url, { userId: uId, roleName: role, addRole: false }, function () {
-
-                    });
-                }
+                $.get(url, { userId: uId, roleName: role, addRole: this.checked }, function () {});
             });
         });
     </script>
-    
 }

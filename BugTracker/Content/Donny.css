@@ -1,0 +1,54 @@
+﻿#user-list, .user-list {
+    margin: 3em auto;
+    width: 90%;
+}
+
+#user-list td, .user-list td {
+    padding: 0.5em;
+}
+
+#user-list {
+    color: #000;
+}
+
+#user-list tr:nth-child(even), .user-list tr:nth-child(even) {
+    background-color: #36c6d3;
+}
+
+.dev {
+    color: green;
+    font-weight: 700;
+    margin: 0 0.5em;
+}
+
+.pm {
+    color: orangered;
+    font-weight: 700;
+    margin: 0 0.5em;
+}
+
+#userlist-container {
+    margin-top: 1em;
+}
+
+.role {
+    padding: 0 0.75em 0 0;
+}
+
+.remove-manager {
+    font-size: 0.6em;
+    padding: 0.1em 0.3em;
+    border: 1px solid;
+    border-radius: 0.3em;
+    background-color: red;
+    
+}
+
+.remove-manager a {
+    color: #fff;
+    font-weight: 700;
+}
+
+.ticket-nav a {
+    margin-right: 2em;
+}

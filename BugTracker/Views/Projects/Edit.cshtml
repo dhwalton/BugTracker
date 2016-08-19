@@ -42,16 +42,32 @@
     </div>
 }
 
+<div>
+    <h3>Project Manager: 
+        @if (Model.Project.ManagerId != null)
+        {
+            <span>@Model.Manager.FirstName</span> <span>@Model.Manager.LastName</span>
+            if (User.IsInRole("Admin"))
+            {
+                <span class="remove-manager">@Html.ActionLink("X","ChangeProjectManager",new { userId = "", projectId = @Model.Project.Id })</span>
+            }
+        }
+        else
+        {
+            <span>Unassigned</span>
+        }
+    </h3>
+</div>
 
 @Html.Partial("_AddUserToProject", Model)
-@Html.Partial("_UsersInProject", Model.Project)
+@Html.Partial("_UsersInProject", Model)
 
 
 
 <h2>Tickets in this Project</h2>
 <table class="user-list">
     @foreach (var ticket in Model.Project.Tickets)
-    {
+                {
         <tr><td>@ticket.Title</td></tr>
     }
 </table>

@@ -76,6 +76,7 @@ public class TicketsHelper
         db.SaveChanges();
     }
 
+    // is a specific user assigned to a specific ticket?
     public bool UserIsAssignedTicket(int ticketId, string userId)
     {
         var ticket = db.Tickets.Find(ticketId);
@@ -87,6 +88,19 @@ public class TicketsHelper
         {
             return false;
         }
-        
+    }
+
+    // does a specific user own a specific ticket?
+    public bool UserOwnsTicket(int ticketId, string userId)
+    {
+        var ticket = db.Tickets.Find(ticketId);
+        if (ticket.OwnerUserId == userId)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

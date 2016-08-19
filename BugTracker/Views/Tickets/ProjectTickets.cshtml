@@ -4,26 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>My Submitted Tickets</h2>
+<h2>Tickets For My Projects</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create") | @Html.ActionLink("All Tickets", "Index") | @Html.ActionLink("My Assigned Tickets", "AssignedTickets")
-    @if (User.IsInRole("Submitter"))
-    {
-        <span>|</span> @Html.ActionLink("My Submitted Tickets", "SubmittedTickets")
-    }
+@Html.Partial("_TicketNav")
 
-    |
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken();
-        @Html.Label("Search")
-        <span>&nbsp;</span>
-        @Html.TextBox("searchStr")
-        <input type="submit" value="Go" />
-    }
-</p>
 <table class="table" id="data-table">
     <thead>
         <tr>
@@ -90,17 +74,12 @@
                     @Html.DisplayFor(modelItem => item.Created)
                 </td>
                 <td>
-                    @if (ViewBag.UserId == item.AssignedUserId || User.IsInRole("Admin") || (User.IsInRole("Project Manager") && item.Project.Users.Contains(ViewBag.User)))
-                {
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                    }
-                    else
-                    {
-                        @Html.ActionLink("Details", "Details", new { id = item.Id })
-                    }
+                    
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                   
 
                     @if (User.IsInRole("Admin"))
-                {
+                    {
                         <span>|</span>
                         @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                     }

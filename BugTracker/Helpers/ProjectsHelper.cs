@@ -1,6 +1,7 @@
 ﻿using BugTracker.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -82,5 +83,32 @@ public class ProjectsHelper
         var newUser = db.Users.Find(userId);
         project.Users.Add(newUser);
         db.SaveChanges();
+    }
+
+    // assign a project manager to a project
+    public void AssignManagerToProject(int projectId, string userId)
+    {
+        db.Projects.Find(projectId).ManagerId = userId;
+        db.SaveChanges();
+    }
+
+    public ApplicationUser GetManagerForProject(int projectId)
+    {
+        var project = db.Projects.Find(projectId);
+        if (!String.IsNullOrWhiteSpace(project.ManagerId))
+        {
+            var user = db.Users.Find(project.ManagerId);
+            return user;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public string ManagerOfProject(int projectId)
+    {
+        var project = db.Projects.Find(projectId);
+        return project.ManagerId;
     }
 }

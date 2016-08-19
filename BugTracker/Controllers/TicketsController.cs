@@ -135,17 +135,18 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
+        [Authorize (Roles="Admin, Project Manager")]
         public ActionResult ProjectTickets()
         {
             ViewBag.UserId = User.Identity.GetUserId();
             ViewBag.User = db.Users.Find(User.Identity.GetUserId());
 
-            // instantiate an ApplicationUser from this user's Id
-            var user = db.Users.Find(User.Identity.GetUserId());
+            var userId = User.Identity.GetUserId();
 
             // all tickets submitted by this user with relevant fields from related tables 
             var tickets = db.Tickets.Include(t => t.AssignedUser)
-                .Where(t => t.Project.Users.Any(u => u.Id == user.Id))
+                //.Where(t => t.Project.Users.Any(u => u.Id == userId))
+                .Where(t => t.Project.ManagerId == userId)
                 .Include(t => t.OwnerUser)
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
@@ -165,11 +166,12 @@ namespace BugTracker.Controllers
             ViewBag.User = db.Users.Find(User.Identity.GetUserId());
 
             // instantiate an ApplicationUser from this user's Id
-            var user = db.Users.Find(User.Identity.GetUserId());
+            //var user = db.Users.Find(User.Identity.GetUserId());
+            var userId = User.Identity.GetUserId();
 
             //all tickets with relevant fields from related tables
             var tickets = db.Tickets
-                .Where(t => t.AssignedUser.Id == user.Id)
+                .Where(t => t.AssignedUser.Id == userId)
                 .Include(t => t.AssignedUser)
                 .Include(t => t.OwnerUser)
                 .Include(t => t.TicketPriority)
@@ -182,6 +184,8 @@ namespace BugTracker.Controllers
         // GET: Tickets
         public ActionResult Index(int? page)
         {
+            
+
             ViewBag.UserId = User.Identity.GetUserId();
             ViewBag.User = db.Users.Find(User.Identity.GetUserId());
 
@@ -284,12 +288,12 @@ namespace BugTracker.Controllers
 
             var userId = User.Identity.GetUserId();
             var ticket = db.Tickets.Find(id);
-          
+
 
             // kick out devs and PMs who don't meet the criteria to edit this ticket
-            if (!uHelper.IsUserInRole(userId,"Admin") && 
-                ((!uHelper.IsUserInRole(userId, "Project Manager") && !tHelper.UserIsAssignedTicket(id ?? 1, userId))
-                || uHelper.IsUserInRole(userId, "Project Manager") && !pHelper.IsUserOnProject(userId, ticket.Project.Id)))
+            if (!uHelper.IsUserInRole(userId, "Admin") 
+                && ((!uHelper.IsUserInRole(userId, "Project Manager") && !tHelper.UserIsAssignedTicket(id ?? 1, userId))
+                && ticket.Project.ManagerId != userId))
             {
                 return RedirectToAction("Index");
             }
@@ -315,6 +319,9 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedUserId")] Tickets tickets)
         {
+                   
+
+
             if (ModelState.IsValid)
             {
                 tickets.Updated = DateTimeOffset.Now;
@@ -331,6 +338,7 @@ namespace BugTracker.Controllers
         }
 
         // GET: Tickets/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -346,6 +354,7 @@ namespace BugTracker.Controllers
         }
 
         // POST: Tickets/Delete/5
+        [Authorize (Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

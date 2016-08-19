@@ -31,16 +31,19 @@ namespace BugTracker.Models
                 //make a list of the users in the correct roles for project assignment
                 IEnumerable<ApplicationUser> usersInProperRoles = null; // start at null, see below
                 if (urHelper.IsUserInRole(userId, "Admin"))
+                {
+                    if (string.IsNullOrWhiteSpace(Project.ManagerId))
                     {
-                        // admins can assign developers and PMs
-                        usersInProperRoles = urHelper.UsersInRole("Developer")
-                            .Union(urHelper.UsersInRole("Project Manager"));
-                    }
-                    else if (urHelper.IsUserInRole(userId, "Project Manager"))
+                        // Project manager MUST be assigned if there isn't one on the project
+                        usersInProperRoles = urHelper.UsersInRole("Project Manager");
+                    }    
+                    else
                     {
-                        // PMs can assign developers
+                        // Developers are assigned if the project has a manager
                         usersInProperRoles = urHelper.UsersInRole("Developer");
                     }
+                }
+                
 
                 // a null list means this user is not an Admin/PM, they will not have access to
                 // the ability to add/remove users from projects
@@ -53,11 +56,19 @@ namespace BugTracker.Models
                                         select user1;
                     
                 }
-                
+
+                // assign a Project Manager ApplicationUser
+                if (!string.IsNullOrWhiteSpace(Project.ManagerId))
+                {
+                    var h = new UserRolesHelper();
+                    Manager = h.GetUserById(Project.ManagerId);
+                }
+
             }
         }
 
         public Projects Project { get; set; }
+        public ApplicationUser Manager { get; set; }
         public IList<Tickets> AssignedTickets { get; set; }
         public IList<Tickets> UnassignedTickets { get; set; }
         public IEnumerable<ApplicationUser> UsersNotInProject { get; set; }
