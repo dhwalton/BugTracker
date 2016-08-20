@@ -1,0 +1,50 @@
+﻿@model BugTracker.Models.Tickets
+<section id="ticket-attachments">
+    @if (Model.TicketAttachments.Count > 0)
+    {
+        if (Model.TicketAttachments.Count == 1)
+        {
+            <p>There is 1 attachment for this ticket</p>
+        }
+        else
+        {
+            <p>There are @Model.TicketAttachments.Count attachments for this ticket</p>
+        }
+
+        foreach (var attachment in Model.TicketAttachments)
+        {
+            <div class="ticket-attachment">
+                @if (@attachment.IsImage) {
+                    <div class="attachment-img"><img src="@attachment.FileUrl" /></div>
+                }
+                
+                <p><a href="@attachment.FileUrl" target="_top"><span>@attachment.FileUrl</span></a><br /><span>@attachment.Description</span></p>
+                <p>Uploaded by <span>@attachment.User.FirstName</span> <span>@attachment.User.LastName on @attachment.Created</span></p>
+            </div>
+        }
+    }
+    else
+    {
+        <h4>No attachments for this ticket</h4>
+    }
+    <div>
+        @if (ViewBag.CommentAttachmentRights)
+        {
+            using (Html.BeginForm("UploadTicketAttachment", "Tickets", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken();
+                <input type="hidden" name="ticketId" value="@Model.Id" />
+                <span>Description of Attachment[Required]:</span>
+                <p><textarea name="description" required></textarea></p>
+                <p>Upload a File:</p>
+                <input name="attachment" type="file" class="form-control" id="fileUpload" />
+                <input type="submit" class="form-control" value="Upload" />
+            }
+        }
+        else
+        {
+            <h4>Contact Admin or Project Manager for permission to upload ticket attachments.</h4>
+        }
+    </div>
+
+</section>

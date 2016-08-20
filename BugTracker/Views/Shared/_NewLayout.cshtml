@@ -102,33 +102,34 @@
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                     @if (User.IsInRole("Admin"))
                     {
-                        <img src="assets/images/admin.png" alt="" width="30" class="img-circle">
+                        <img src="../../assets/images/admin.png" alt="" width="30" class="img-circle">
                     }
                     else if (User.IsInRole("Project Manager"))
                     {
-                        <img src="assets/images/pm.png" alt="" width="30" class="img-circle">
+                        <img src="../../assets/images/pm.png" alt="" width="30" class="img-circle">
                     }
                     else if (User.IsInRole("Developer"))
                     {
-                        <img src="assets/images/dev.png" alt="" width="30" class="img-circle">
+                        <img src="../../assets/images/dev.png" alt="" width="30" class="img-circle">
                     }
                     else if (User.IsInRole("Submitter"))
                     {
-                        <img src="assets/images/sub.png" alt="" width="30" class="img-circle">
+                        <img src="../../assets/images/sub.png" alt="" width="30" class="img-circle">
                     }
                     else
                     {
-                        <img src="assets/images/user.png" alt="" width="30" class="img-circle">
+                        <img src="../../assets/images/user.png" alt="" width="30" class="img-circle">
                     }
 
                     @User.Identity.Name</a>
                     <ul class="dropdown-menu dropdown-menu-scale user-dropdown">
+                        @Html.Partial("_LoginPartial")
                         @*<li><a href="#"><i class="ion-email-unread"></i> Inbox <span class="label label-warning">3</span></a></li>*@
-                        <li><a href="#"><i class="ion-person"></i> Profile </a></li>
+                        @*<li><a href="#"><i class="ion-person"></i> Profile </a></li>*@
                         @*<li><a href="#"><i class="ion-settings"></i> Settings <span class="label label-primary">3/9</span></a></li>
                         <li><a href="#"><i class="ion-calendar"></i> Calendar </a></li>
                         <li><a href="#"><i class="ion-ios-compose"></i> Tasks </a></li>*@
-                        <li><a href="#"><i class="ion-log-out"></i> Logout </a></li>
+                        @*<li><a href="#"><i class="ion-log-out"></i> Logout </a></li>*@
                     </ul>
                 }
             </li>
@@ -153,6 +154,8 @@
                             <span class="selected"></span>
                         </a>
                     </li>
+
+                    @if (User.IsInRole("Admin")) {
                     <li class="">
                         <a href="~/Projects/UserManager">
                             <i class="fa fa-home"></i>
@@ -160,34 +163,48 @@
                             <span class="selected"></span>
                         </a>
                     </li>
-                    <!-- Projects -->
-                    <li class="hoe-has-menu">
-                        <a href="#">
-                            <i class="ion-ios-filing-outline"></i>
-                            <span class="menu-text">Projects</span>
-                            <span class="selected"></span>
-                        </a>
-                        <ul class="hoe-sub-menu">
-                            <li>
-                                <a href="~/Projects/Create">
-                                    <span class="menu-text">Create a Project</span>
-                                    <span class="selected"></span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="~/Projects">
-                                    <span class="menu-text">View All Projects</span>
-                                    <span class="selected"></span>
-                                </a>
-                            </li>
-                            <li class="~/Projects">
-                                <a href="javascript:void(0)">
-                                    <span class="menu-text">My Projects</span>
-                                    <span class="selected"></span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    }
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("Developer") || User.IsInRole("Project Manager")) {
+                        <!-- Projects -->
+                        <li class="hoe-has-menu">
+                            <a href="#">
+                                <i class="ion-ios-filing-outline"></i>
+                                <span class="menu-text">Projects</span>
+                                <span class="selected"></span>
+                            </a>
+                            
+                            <ul class="hoe-sub-menu">
+                                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                                {
+                                    <li>
+                                        <a href="~/Projects/Create">
+                                            <span class="menu-text">Create a Project</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (User.IsInRole("Admin")) {
+                                    <li>
+                                        <a href="~/Projects">
+                                            <span class="menu-text">View All Projects</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                }
+
+                                @if(User.IsInRole("Project Manager") || User.IsInRole("Developer")) {
+                                    <li class="~/Projects">
+                                        <a href="~/Projects">
+                                            <span class="menu-text">My Projects</span>
+                                            <span class="selected"></span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
 
                     <!-- Tickets -->
                     <li class="hoe-has-menu">
@@ -198,37 +215,43 @@
                         </a>
                         <ul class="hoe-sub-menu">
                             <li>
-                                <a href="javascript:void(0)">
-                                    <span class="menu-text">
-                                        Submit a Ticket
-                                    </span>
-                                    <span class="selected"></span>
-                                </a>
-                            </li>
-                            <li>
                                 <a href="~/Tickets">
                                     <span class="menu-text">View All Tickets</span>
                                     <span class="selected"></span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="~/Tickets/SubmittedTickets">
-                                    <span class="menu-text">My Submitted Tickets</span>
-                                    <span class="selected"></span>
-                                </a>
-                            </li>
-                            <li class="hoe-sub-menu">
-                                <a href="~/Tickets/AssignedTickets">
-                                    <span class="menu-text">My Assigned Tickets</span>
-                                    <span class="selected"></span>
-                                </a>
-                            </li>
-                            <li class="hoe-sub-menu">
-                                <a href="~/Tickets/ProjectTickets">
-                                    <span class="menu-text">Tickets for my Projects</span>
-                                    <span class="selected"></span>
-                                </a>
-                            </li>
+                            @if (User.IsInRole("Submitter")) {
+                                <li>
+                                    <a href="~/Tickets/Create">
+                                        <span class="menu-text">
+                                            Submit a Ticket
+                                        </span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="~/Tickets/SubmittedTickets">
+                                        <span class="menu-text">My Submitted Tickets</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Developer") || User.IsInRole("Project Manager"))
+                            {
+                                <li class="hoe-sub-menu">
+                                    <a href="~/Tickets/AssignedTickets">
+                                        <span class="menu-text">My Assigned Tickets</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                                <li class="hoe-sub-menu">
+                                    <a href="~/Tickets/ProjectTickets">
+                                        <span class="menu-text">Tickets for my Projects</span>
+                                        <span class="selected"></span>
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </li>
 
@@ -246,7 +269,7 @@
                 <div class="footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <span>@*&copy; Copyright 2016. Assan*@By Donny Walton</span>
+                            <span>@*&copy; Copyright 2016. Assan*@<a href="https://dhwalton-portfolio.azurewebsites.net">By Donny Walton</a></span>
                         </div>
                     </div>
                 </div>

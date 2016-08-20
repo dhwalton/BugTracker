@@ -588,7 +588,7 @@ Top bar styles
 .hoe-right-header ul > li img {
   margin-right: 5px;
 }
-.hoe-right-header ul > li > a {
+.hoe-right-header ul > li > a, .dropdown-margin-bump a {
   color: #999;
   line-height: 50px;
   display: block;
@@ -700,7 +700,7 @@ Drop down menu styles
   margin-right: 0px;
 }
 
-.hoe-right-header ul.dropdown-menu > li > a {
+.hoe-right-header ul.dropdown-menu > li > a, .dropdown-margin-bump > a {
   display: block;
   padding: 9px 20px;
   line-height: auto;

@@ -14,6 +14,9 @@ namespace BugTracker.Models
         public DateTimeOffset Created { get; set; }
         public string UserId { get; set; }
         public string FileUrl { get; set; }
+        
+        // is this attachment an image?
+        public bool IsImage { get; set; }
 
         public virtual ApplicationUser User { get; set; }
         public virtual Tickets Ticket { get; set; }

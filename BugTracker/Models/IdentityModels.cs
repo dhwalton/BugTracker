@@ -80,6 +80,12 @@ namespace BugTracker.Models
             return h.UserIsAssignedTicket(ticketId, Id);
         }
 
+        public bool CanEditTicket(int ticketId)
+        {
+            var h = new TicketsHelper();
+            return h.CanEditTicket(Id, ticketId);
+        }
+
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]

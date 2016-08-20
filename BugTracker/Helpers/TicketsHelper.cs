@@ -24,6 +24,24 @@ public class TicketsHelper
         return tickets;
     }
 
+    public bool CanEditTicket(string userId, int ticketId)
+    {
+        var ticket = db.Tickets.Find(ticketId);
+        var user = db.Users.Find(userId);
+
+        // admins can edit all tickets
+        if (user.inRole("Admin")) return true;
+
+        // managers of a ticket's project can edit
+        if (userId == ticket.Project.ManagerId) return true;
+
+        // any user that is assigned this ticket can edit
+        if (userId == ticket.AssignedUserId) return true;
+
+        // nobody else can edit!
+        return false;
+    }
+
     // generate a list of tickets assigned to a user
     public IList<Tickets>TicketsAssignedToUser(string userId)
     {

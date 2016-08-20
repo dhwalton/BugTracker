@@ -92,7 +92,7 @@
 
     </dl>
 </div>
-@ if(User.)
+@Html.Partial("_TicketAttachments")
 @Html.Partial("_TicketComments")
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |

@@ -29,12 +29,18 @@ namespace BugTracker.Controllers
             // check to see if this user isn't an admin
             if (!User.IsInRole("Admin"))
             {
-                // get this user's id
-                var userId = User.Identity.GetUserId();
+                // only show the projects to which this user belongs
+                var user = db.Users.Find(User.Identity.GetUserId());
+                projects = projects.Where(p => p.Users.Contains(user)).ToList();
+
+                
+
+                //// get this user's id
+                //var userId = User.Identity.GetUserId();
 
 
-                // filter the project list to only projects managed by this user
-                projects = projects.Where(p => p.ManagerId == userId).ToList();
+                //// filter the project list to only projects managed by this user
+                //projects = projects.Where(p => p.ManagerId == userId).ToList();
             }
                     
             return View(projects);

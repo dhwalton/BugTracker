@@ -471,6 +471,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Uploads\dw.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -546,6 +547,7 @@
     <Content Include="Views\Shared\_TicketNav.cshtml" />
     <Content Include="Views\Shared\_NewLayout.cshtml" />
     <Content Include="Views\Shared\_Login.cshtml" />
+    <Content Include="Views\Shared\_TicketAttachments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

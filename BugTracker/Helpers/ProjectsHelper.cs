@@ -8,7 +8,7 @@ using System.Linq;
 
 public class ProjectsHelper
 {
-    
+
     private ApplicationDbContext db = new ApplicationDbContext();
     private UserManager<ApplicationUser> userManager;
 
@@ -22,6 +22,13 @@ public class ProjectsHelper
         var project = db.Projects.Find(projectId);
         var flag = project.Users.Any(u => u.Id == userId);
         return flag;
+    }
+
+    public IQueryable<Projects> ProjectsAssigned(string userId)
+    {
+        var user = db.Users.Find(userId);
+        var projects = db.Projects.Where(p => p.Users.Contains(user));
+        return projects;
     }
 
     // generate a list of projects assigned to a user
@@ -71,6 +78,15 @@ public class ProjectsHelper
         var result = project.Users.Remove(user);
         if (result)
         {
+            //var tickets = project.Tickets.Where(t => t.AssignedUserId == userId);
+            
+            //// unassign a project's tickets from this user (could this be done with linq?)
+            //foreach (var ticket in tickets)
+            //{
+            //    ticket.AssignedUserId = null;
+            //}
+
+
             db.SaveChanges();
         }
         return result;
