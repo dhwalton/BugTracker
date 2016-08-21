@@ -1,5 +1,6 @@
 ﻿@model BugTracker.Models.Tickets
 <section id="ticket-attachments">
+    <h4>Attachments for this Ticket</h4>
     @if (Model.TicketAttachments.Count > 0)
     {
         if (Model.TicketAttachments.Count == 1)
@@ -17,7 +18,11 @@
                 @if (@attachment.IsImage) {
                     <div class="attachment-img"><img src="@attachment.FileUrl" /></div>
                 }
-                
+                else
+                {
+                    <div class="attachment-img"><img src="~/Uploads/TxtFile.png" /></div>
+                }
+
                 <p><a href="@attachment.FileUrl" target="_top"><span>@attachment.FileUrl</span></a><br /><span>@attachment.Description</span></p>
                 <p>Uploaded by <span>@attachment.User.FirstName</span> <span>@attachment.User.LastName on @attachment.Created</span></p>
             </div>
@@ -27,7 +32,8 @@
     {
         <h4>No attachments for this ticket</h4>
     }
-    <div>
+    <div style="padding-top: 1em">
+        <h4>Upload an Attachment</h4>
         @if (ViewBag.CommentAttachmentRights)
         {
             using (Html.BeginForm("UploadTicketAttachment", "Tickets", FormMethod.Post, new { enctype = "Multipart/form-data" }))

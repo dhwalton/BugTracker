@@ -1,52 +1,41 @@
-﻿@using BugTracker.Models;
-@model Tickets
+﻿@model BugTracker.Models.Tickets
+<section id="ticket-users">
 
-
-@*@foreach (var user in Model.Users)
+    @if (Model.AssignedUser == null)
     {
-        <div class="user-search">
-
-            @Html.ActionLink("Add", "AddUserToProject", new {ProjectId = Model.ProjectId, UserId = user.Id }, new { @class="addToProject" })
-            @user.FirstName @user.LastName | @user.Displayname | @user.Email
+        <h4>Assign a user to this ticket</h4>
+        <table class="user-list">
+            <tr><th>Role(s)</th><th>Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
+            @foreach (var user in Model.Project.Users)
+            {
+                <tr>
+                    <td>
+                        @if (user.IsPM())
+                    {
+                            <span class="pm">PM</span>
+                        }
+                        @if (user.IsDev())
+                    {
+                            <span class="dev">Dev</span>
+                        }
+                    </td>
+                    <td>@user.FirstName @user.LastName</td>
+                    <td>@user.Displayname</td>
+                    <td>@user.Email</td>
+                    <td>@Html.ActionLink("Assign", "AssignUserToTicket", new { TicketId = Model.Id, UserId = @user.Id })</td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        @Html.LabelFor(model => model.AssignedUserId, "Assigned User", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.Label(Model.AssignedUser.Displayname, htmlAttributes: new { @class = "control-label" })
+            @Html.ActionLink(" X", "RemoveAssignedUserFromTicket", new { ticketId = Model.Id })
         </div>
-    }*@
+    }
 
-
-@if (Model.AssignedUser == null)
-{
-    <h4>Assign a user to this ticket</h4>
-    <table class="user-list">
-        <tr><th>Role(s)</th><th>Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
-        @foreach (var user in Model.Project.Users)
-        {
-            <tr>
-                <td>
-                    @if (user.IsPM())
-                    {
-                        <span class="pm">PM</span>
-                    }
-                    @if (user.IsDev())
-                    {
-                        <span class="dev">Dev</span>
-                    }
-                </td>
-                <td>@user.FirstName @user.LastName</td>
-                <td>@user.Displayname</td>
-                <td>@user.Email</td>
-                <td>@Html.ActionLink("Assign", "AssignUserToTicket", new { TicketId = Model.Id, UserId = @user.Id })</td>
-            </tr>
-        }
-    </table>
-}
-else
-{
-    @Html.LabelFor(model => model.AssignedUserId, "Assigned User", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.Label(Model.AssignedUser.Displayname, htmlAttributes: new { @class = "control-label" })
-        @Html.ActionLink(" X", "RemoveAssignedUserFromTicket", new { ticketId = Model.Id })
-    </div>
-}
-
-
+</section>
 
 

@@ -21,18 +21,24 @@
    
 }
 
-
+.dev, .pm {
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.71);
+    padding: 2px 4px;
+    border-radius: 0.25em;
+}
 
 .dev {
-    color: green;
+    color: #fff;
     font-weight: 700;
     margin: 0 0.5em;
+    background-color: green;
 }
 
 .pm {
-    color: orangered;
+    color: red;
     font-weight: 700;
     margin: 0 0.5em;
+    background-color: yellow;
 }
 
 #userlist-container {
@@ -65,10 +71,14 @@
     
 }
 
-#ticket-attachments, #ticket-comments, .ticket-attachment {
-    padding: 1em 0;
+#ticket-attachments, #ticket-comments, .ticket-attachment, #ticket-users {
     border-bottom: 1px solid #eee;
     border-top: 1px solid #eee;
+    padding-top: 1em;
+}
+
+#ticket-users {
+    padding: 1em;
 }
 
 .attachment-img img {
