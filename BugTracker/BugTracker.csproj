@@ -548,6 +548,8 @@
     <Content Include="Views\Shared\_NewLayout.cshtml" />
     <Content Include="Views\Shared\_Login.cshtml" />
     <Content Include="Views\Shared\_TicketAttachments.cshtml" />
+    <Content Include="Views\Shared\_ProjectTickets.cshtml" />
+    <Content Include="Views\Shared\_TicketHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

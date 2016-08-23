@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Text;
+using System.Web;
 
 public class TicketsHelper
 {
@@ -15,6 +17,53 @@ public class TicketsHelper
     public TicketsHelper()
     {
        // userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+    }
+
+    public String HistoryToString(int id, bool old)
+    {
+        var history = db.TicketHistories.Find(id);
+        string result;
+
+        if (old)
+        {
+            result = history.OldValue;
+        }
+        else
+        {
+            result = history.NewValue;
+        }
+        
+        switch (history.Property)
+        {
+            case "AssignedUser":
+                var user = db.Users.Find(result) ?? new ApplicationUser { Displayname = "Unassigned" };
+                return user.Displayname;
+            case "TicketStatusId":
+                return db.TicketStatuses.Find(int.Parse(result)).Name;
+            case "TicketPriorityId":
+                return db.TicketPriorities.Find(int.Parse(result)).Name;
+            case "TicketTypeId":
+                return db.TicketTypes.Find(int.Parse(result)).Name;
+            default:
+                return result;
+        }
+    }
+
+    public void LogTicketActivity(int ticketId, string property, string oldValue, string newValue)
+    {
+        //var ticket = db.Tickets.Find(ticketId);
+        var log = new TicketHistories()
+        {
+            Changed = true,
+            ChangedDate = DateTimeOffset.Now,
+            Property = property,
+            OldValue = oldValue,
+            NewValue = newValue,
+            TicketId = ticketId,
+            UserId = HttpContext.Current.User.Identity.GetUserId()
+        };
+        db.TicketHistories.Add(log);
+        db.SaveChanges();
     }
 
     public IQueryable<Tickets> UserTickets(string userId)
@@ -81,6 +130,7 @@ public class TicketsHelper
     {
         var user = db.Users.Find(userId);
         var ticket = db.Tickets.Find(ticketId);
+        LogTicketActivity(ticketId, "AssignedUser", ticket.AssignedUserId, userId);
         ticket.AssignedUser = user;
         ticket.Updated = DateTimeOffset.Now;
         db.SaveChanges();
@@ -89,6 +139,7 @@ public class TicketsHelper
     public void RemoveUserFromTicket(int ticketId)
     {
         var ticket = db.Tickets.Find(ticketId);
+        LogTicketActivity(ticketId, "AssignedUser", ticket.AssignedUserId, null);
         ticket.AssignedUserId = null;
         ticket.Updated = DateTimeOffset.Now;
         db.SaveChanges();

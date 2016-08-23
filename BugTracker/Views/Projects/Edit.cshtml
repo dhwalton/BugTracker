@@ -65,12 +65,13 @@
 
 
 <h2>Tickets in this Project</h2>
-<table class="user-list">
+@Html.Partial("_ProjectTickets", Model.Project)
+@*<table class="user-list">
     @foreach (var ticket in Model.Project.Tickets)
                 {
         <tr><td>@ticket.Title</td></tr>
     }
-</table>
+</table>*@
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>

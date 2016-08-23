@@ -20,7 +20,7 @@ namespace BugTracker.Controllers
 
 
         // GET: Projects
-        [Authorize(Roles="Admin,Developer,Project Manager")]
+        [Authorize(Roles="Admin, Developer, Project Manager")]
         public ActionResult Index()
         {
             // start with a list of all projects
@@ -265,9 +265,6 @@ namespace BugTracker.Controllers
             var projHelper = new ProjectsHelper();
             var urHelper = new UserRolesHelper();
             var userId = User.Identity.GetUserId();
-            
-
-            
 
             // kick this user back to the index if they aren't assigned to this project and don't have admin rights
             if (!projHelper.IsUserInProject(userId,id ?? 1) && !urHelper.IsUserInRole(userId,"Admin"))

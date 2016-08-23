@@ -136,7 +136,7 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
-        [Authorize (Roles="Admin, Project Manager")]
+        [Authorize (Roles="Admin, Project Manager, Developer")]
         public ActionResult ProjectTickets()
         {
             ViewBag.UserId = User.Identity.GetUserId();
@@ -144,10 +144,10 @@ namespace BugTracker.Controllers
 
             var userId = User.Identity.GetUserId();
 
-            // all tickets submitted by this user with relevant fields from related tables 
-            var tickets = db.Tickets.Include(t => t.AssignedUser)
-                //.Where(t => t.Project.Users.Any(u => u.Id == userId))
-                .Where(t => t.Project.ManagerId == userId)
+            // all tickets that are in the user's projects
+            var tickets = db.Tickets
+                .Where(t => t.Project.Users.Any(u => u.Id == userId))
+                .Include(t => t.AssignedUser)
                 .Include(t => t.OwnerUser)
                 .Include(t => t.TicketPriority)
                 .Include(t => t.TicketStatus)
@@ -267,6 +267,7 @@ namespace BugTracker.Controllers
         public ActionResult Create([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedUserId")] Tickets tickets)
         {
             var helper = new UserRolesHelper();
+
             tickets.OwnerUserId = helper.GetUserByName(User.Identity.Name).Id;
             tickets.Created = DateTimeOffset.Now;
             tickets.AssignedUserId = null;
@@ -303,14 +304,16 @@ namespace BugTracker.Controllers
             var userId = User.Identity.GetUserId();
             var ticket = db.Tickets.Find(id);
 
-            
+
 
             // kick out devs and PMs who don't meet the criteria to edit this ticket
-            if (!uHelper.IsUserInRole(userId, "Admin") 
-                && ((!uHelper.IsUserInRole(userId, "Project Manager") && !tHelper.UserIsAssignedTicket(id ?? 1, userId))
-                && ticket.Project.ManagerId != userId))
+            //if (!uHelper.IsUserInRole(userId, "Admin") 
+            //    && ((!uHelper.IsUserInRole(userId, "Project Manager") && !tHelper.UserIsAssignedTicket(id ?? 1, userId))
+            //    && ticket.Project.ManagerId != userId))
+            if (!tHelper.CanEditTicket(userId, id ?? 1))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id = id });
+                //return RedirectToAction("Index");
             }
 
 
@@ -355,10 +358,26 @@ namespace BugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                var id = tickets.Id;
+                
+                var helper = new TicketsHelper();
+                
+                // No tracking method keeps the system from throwing a primary key conflict exception - also necessitates using Where() instead of Find()
+                var oldTicket = db.Tickets.AsNoTracking().Where(t => t.Id == tickets.Id).First();
+
+                //log any changes to the ticket
+                if (oldTicket.Title != tickets.Title) helper.LogTicketActivity(tickets.Id, "Title", oldTicket.Title, tickets.Title);
+                if (oldTicket.Description != tickets.Description) helper.LogTicketActivity(tickets.Id, "Description", oldTicket.Description, tickets.Description);
+                if (oldTicket.ProjectId != tickets.ProjectId) helper.LogTicketActivity(tickets.Id, "Project", oldTicket.Project.Name, tickets.Project.Name);
+                if (oldTicket.TicketPriorityId != tickets.TicketPriorityId) helper.LogTicketActivity(tickets.Id, "TicketPriorityId", oldTicket.TicketPriorityId.ToString(), tickets.TicketPriorityId.ToString());
+                if (oldTicket.TicketTypeId != tickets.TicketTypeId) helper.LogTicketActivity(tickets.Id, "TicketTypeId", oldTicket.TicketTypeId.ToString(), tickets.TicketTypeId.ToString());
+                if (oldTicket.TicketStatusId != tickets.TicketStatusId) helper.LogTicketActivity(tickets.Id, "TicketStatusId", oldTicket.TicketStatusId.ToString(), tickets.TicketStatusId.ToString());
+                
                 tickets.Updated = DateTimeOffset.Now;
+
                 db.Entry(tickets).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", new { id = tickets.Id });
             }
             ViewBag.AssignedUserId = new SelectList(db.Users, "Id", "FirstName", tickets.AssignedUserId);
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", tickets.OwnerUserId);
@@ -415,6 +434,8 @@ namespace BugTracker.Controllers
                         ticketAttachment.UserId = userId;
 
                         ticket.TicketAttachments.Add(ticketAttachment);
+
+                        helper.LogTicketActivity(ticketId, "Attachment Added", "", ticketAttachment.FileUrl);
 
                         db.Entry(ticket).State = EntityState.Modified;
                         db.SaveChanges(); 

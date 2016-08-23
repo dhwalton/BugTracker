@@ -7,6 +7,11 @@ namespace BugTracker.Models
 {
     public class TicketHistories
     { 
+        public string ToMessage(bool old)
+        {
+            var h = new TicketsHelper();
+            return h.HistoryToString(Id, old);
+        }
         public int Id { get; set; }
         public int TicketId { get; set; }
         public string UserId { get; set; }

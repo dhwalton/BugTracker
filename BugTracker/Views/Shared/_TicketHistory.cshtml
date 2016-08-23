@@ -1,0 +1,29 @@
+﻿@model BugTracker.Models.Tickets
+<section id="ticket-comments">
+    <h4>History of this Ticket</h4>
+    @if (Model.TicketHistories.Count > 0)
+    {
+        <table id="ticket-history">
+            <thead>
+                <tr><th>Date</th><th>User</th><th>Property</th><th>Old Value</th><th>New Value</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TicketHistories)
+                {
+                    <tr>
+                        <td>@item.ChangedDate</td>
+                        <td>@item.User.Displayname</td>
+                        <td>@item.Property</td>
+                        <td class="old">@item.ToMessage(true)</td>
+                        <td class="new">@item.ToMessage(false)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h4>No changes on this ticket</h4>
+    }
+
+</section>

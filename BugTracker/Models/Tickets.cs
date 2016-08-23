@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-// TEST!
+
 namespace BugTracker.Models
 {
     public class Tickets
@@ -32,9 +32,11 @@ namespace BugTracker.Models
         [Display(Name = "Created On")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yy, h:mm tt}")]
         public DateTimeOffset Created { get; set; }
+
         [Display(Name = "Updated On")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yy, h:mm tt}")]
         public DateTimeOffset? Updated { get; set; }
+
         public int ProjectId { get; set; }
         public int TicketTypeId { get; set; }
         public int TicketPriorityId { get; set; }

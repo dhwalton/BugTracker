@@ -70,27 +70,16 @@ namespace BugTracker.Controllers
         public ActionResult LeaveComment(string commentText, int ticketId)
         {
             var helper = new UserRolesHelper();
+            var tHelper = new TicketsHelper();
             var userId = User.Identity.GetUserId();
 
             var user = db.Users.Find(User.Identity.GetUserId());
             var ticket = db.Tickets.Find(ticketId);
 
-            // Admins can do anything they want
-            if (!helper.IsUserInRole(userId, "Admin"))
+            // Check to see if this user meets the criteria to leave a comment
+            if (!tHelper.CanEditTicket(user.Id,ticketId) && user.Id != ticket.OwnerUserId)
             {
-                //// PMS can only leave comments on tickets for assigned projects
-                //if (helper.IsUserInRole(userId, "Project Manager") && !ticket.Project.Users.Contains(user))
-                //{
-                //    return RedirectToAction("Index", "Tickets");
-                //}
-                //// Devs can only leave comments on tickets they are assigned
-                //else if (helper.IsUserInRole(userId, "Developer"))
-                //// Submitters can only leave comments on tickets they own
-
-                
-
-
-
+                return RedirectToAction("Details", "Tickets", new { id = ticketId });
             }
 
             var comment = new TicketComments();

@@ -1,0 +1,36 @@
+﻿@model BugTracker.Models.Projects
+
+@if (Model.Tickets.Count > 0) { 
+<table id="project-tickets">
+    <tr><th>Ticket</th><th>Submitter</th><th>Assigned to</th></tr>
+    @foreach (var ticket in Model.Tickets)
+    {
+        <tr>
+            
+            <td>@Html.ActionLink(@ticket.Title, "Edit", "Tickets", new { id = @ticket.Id }, null)</td>
+            @if (@ticket.OwnerUserId != null) 
+            {
+                <td>@ticket.OwnerUser.FirstName @ticket.OwnerUser.LastName</td>
+            }
+            else
+            {
+                <td>Unknown</td>
+            }
+            <td>
+                @if (@ticket.AssignedUserId != null) 
+                {
+                    @ticket.AssignedUser.FirstName  @ticket.AssignedUser.LastName
+                }
+                else
+                {
+                    <span>Unassigned</span>
+                }
+            </td>
+        </tr>
+    }
+</table>
+}
+else
+{
+    <h4>There are no tickets for this project.</h4>
+}

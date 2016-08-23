@@ -5,10 +5,33 @@
     {
         foreach (var comment in Model.TicketComments)
         {
-            <div>
-                @comment.User.Displayname said:
-                <p>@comment.Comment</p>
-                <p style="font-style:italic">@comment.Created</p>
+            
+            <div class="ticket-comment">
+                <p class="ticket-comment-author">
+                    @if(comment.User.inRole("Admin"))
+                    {
+                        <span class="admin">Admin</span>
+                    }
+
+                    @if (Model.Project.ManagerId == comment.UserId)
+                    {
+                        <span class="pm">PM</span>
+                    }
+
+                    @if (comment.User.IsDev())
+                    {
+                        <span class="dev">Dev</span>
+                    }
+
+                    @if (Model.OwnerUserId == comment.UserId)
+                    {
+                        <span class="submitter">Submitter</span>
+                    }
+
+                    @comment.User.Displayname said:
+                </p>
+                <p class="ticket-comment-body">@comment.Comment</p>
+                <p class="ticket-comment-date">@comment.Created</p>
             </div>
         }
     }
@@ -31,7 +54,7 @@
         }
         else
         {
-            <h4>Contact Admin or Project Manager for permission to leave comments.</h4>
+            <h4 class="alert">Contact Admin or Project Manager for permission to leave comments.</h4>
         }
     </div>
 </section>
