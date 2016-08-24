@@ -90,6 +90,26 @@ namespace BugTracker.Controllers
             db.TicketComments.Add(comment);
             db.SaveChanges();
 
+            // notify project manager
+            string message = "Comment has been added";
+            if (userId != ticket.Project.ManagerId)
+            {
+                tHelper.CreateNotification(ticketId, ticket.Project.ManagerId, message);
+            }
+
+            // notify assigned user
+            if (userId != ticket.AssignedUserId && ticket.AssignedUserId != ticket.Project.ManagerId)
+            {
+                tHelper.CreateNotification(ticketId, ticket.AssignedUserId, message);
+            }
+
+            // notify submitter
+            if (userId != ticket.OwnerUserId)
+            {
+                tHelper.CreateNotification(ticketId, ticket.OwnerUserId, message);
+            }
+
+
             if (User.IsInRole("Admin") || 
                 ticket.AssignedUserId == user.Id || 
                 (User.IsInRole("Project Manager") && ticket.Project.Users.Contains(user)))

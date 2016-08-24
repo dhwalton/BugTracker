@@ -1,4 +1,5 @@
 ﻿using BugTracker.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,13 @@ namespace BugTracker.Controllers
             
             
             return View();
+        }
+
+        public ActionResult _NotificationsMenuItem()
+        {
+            var userId = User.Identity.GetUserId();
+            var notifications = db.TicketNotifications.Where(n => n.UserId == userId).Where(n => n.IsRead == false);
+            return PartialView(notifications.ToList());
         }
 
         public ActionResult About()

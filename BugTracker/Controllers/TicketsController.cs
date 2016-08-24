@@ -95,10 +95,6 @@ namespace BugTracker.Controllers
             ViewBag.UserId = User.Identity.GetUserId();
             ViewBag.User = db.Users.Find(User.Identity.GetUserId());
 
-            int pageSize = 15;
-            int pageNumber = (page ?? 1);
-            
-
             // all tickets with relevant fields from related tables
             var tickets = db.Tickets.Include(t => t.AssignedUser)
                 .Include(t => t.OwnerUser)
@@ -304,7 +300,8 @@ namespace BugTracker.Controllers
             var userId = User.Identity.GetUserId();
             var ticket = db.Tickets.Find(id);
 
-
+            
+            //var user = db.Users.Find(User.Identity.GetUserId());
 
             // kick out devs and PMs who don't meet the criteria to edit this ticket
             //if (!uHelper.IsUserInRole(userId, "Admin") 
@@ -316,7 +313,7 @@ namespace BugTracker.Controllers
                 //return RedirectToAction("Index");
             }
 
-
+            
 
             Tickets tickets = db.Tickets.Find(id);
             if (tickets == null)
@@ -341,6 +338,10 @@ namespace BugTracker.Controllers
                 ViewBag.FullEditPermission = true;
             }
 
+            // clear any notifications that the user might have for this ticket
+            tHelper.clearNotifications(id ?? 1, userId);
+
+
             ViewBag.AssignedUserId = new SelectList(db.Users, "Id", "FirstName", tickets.AssignedUserId);
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", tickets.OwnerUserId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", tickets.TicketPriorityId);
@@ -359,7 +360,7 @@ namespace BugTracker.Controllers
             if (ModelState.IsValid)
             {
                 var id = tickets.Id;
-                
+                var userId = User.Identity.GetUserId();
                 var helper = new TicketsHelper();
                 
                 // No tracking method keeps the system from throwing a primary key conflict exception - also necessitates using Where() instead of Find()
@@ -377,8 +378,36 @@ namespace BugTracker.Controllers
 
                 db.Entry(tickets).State = EntityState.Modified;
                 db.SaveChanges();
+
+
+                // notify user(s) that the ticket has been updated
+                // notify project manager
+                var managerId = db.Projects.Find(tickets.ProjectId).ManagerId;
+                string message = "Ticket has been modified";
+                if (userId != managerId)
+                {
+                    helper.CreateNotification(tickets.Id, managerId, message);
+                }
+
+                // notify assigned user
+                if (userId != tickets.AssignedUserId && tickets.AssignedUserId != managerId)
+                {
+                    helper.CreateNotification(tickets.Id, tickets.AssignedUserId, message);
+                }
+
+                // notify submitter
+                if (userId != tickets.OwnerUserId)
+                {
+                    helper.CreateNotification(tickets.Id, tickets.OwnerUserId, message);
+                }
+
+
+
                 return RedirectToAction("Edit", new { id = tickets.Id });
             }
+
+            
+
             ViewBag.AssignedUserId = new SelectList(db.Users, "Id", "FirstName", tickets.AssignedUserId);
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", tickets.OwnerUserId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", tickets.TicketPriorityId);
@@ -426,7 +455,7 @@ namespace BugTracker.Controllers
                         {
                             ticketAttachment.IsImage = false;
                         }
-
+                        
                         ticketAttachment.Created = DateTimeOffset.Now;
                         ticketAttachment.FilePath = filePath;
                         ticketAttachment.FileUrl = Path.Combine(filePath, attachment.FileName);

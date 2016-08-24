@@ -19,6 +19,34 @@ public class TicketsHelper
        // userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
     }
 
+    public void CreateNotification(int ticketId, string userId, string message)
+    {
+        var notification = new TicketNotifications
+        {
+            UserId = userId,
+            Message = message,
+            IsRead = false,
+            TicketId = ticketId
+        };
+        db.TicketNotifications.Add(notification);
+        db.SaveChanges();
+    }
+
+    public void clearNotifications(int ticketId, string userId)
+    {
+        foreach(var notifications in db.TicketNotifications
+                    .Where(n => n.UserId == userId)
+                    .Where(n => n.TicketId == ticketId)
+                    .Where(n => n.IsRead == false))
+        {
+            notifications.IsRead = true;
+        }
+        
+        //db.Entry(notifications).State = EntityState.Modified;
+        db.SaveChanges();                          
+
+    }
+
     public String HistoryToString(int id, bool old)
     {
         var history = db.TicketHistories.Find(id);
@@ -48,6 +76,8 @@ public class TicketsHelper
                 return result;
         }
     }
+
+
 
     public void LogTicketActivity(int ticketId, string property, string oldValue, string newValue)
     {
