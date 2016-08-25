@@ -212,6 +212,7 @@ namespace BugTracker.Controllers
         {
             var helper = new TicketsHelper();
             helper.AddUserToTicket(ticketId, userId);
+            helper.CreateNotification(ticketId, userId, "You have been assigned to this ticket");
             return RedirectToAction("Edit", new { id = ticketId });
         }
 
@@ -396,10 +397,10 @@ namespace BugTracker.Controllers
                 }
 
                 // notify submitter
-                if (userId != tickets.OwnerUserId)
-                {
-                    helper.CreateNotification(tickets.Id, tickets.OwnerUserId, message);
-                }
+                //if (userId != tickets.OwnerUserId)
+                //{
+                //    helper.CreateNotification(tickets.Id, tickets.OwnerUserId, message);
+                //}
 
 
 
@@ -465,6 +466,21 @@ namespace BugTracker.Controllers
                         ticket.TicketAttachments.Add(ticketAttachment);
 
                         helper.LogTicketActivity(ticketId, "Attachment Added", "", ticketAttachment.FileUrl);
+
+
+                        // notify project manager
+                        string message = "Attachment has been added";
+                        if (userId != ticket.Project.ManagerId)
+                        {
+                            helper.CreateNotification(ticketId, ticket.Project.ManagerId, message);
+                        }
+
+                        // notify assigned user
+                        if (userId != ticket.AssignedUserId && ticket.AssignedUserId != ticket.Project.ManagerId)
+                        {
+                            helper.CreateNotification(ticketId, ticket.AssignedUserId, message);
+                        }
+
 
                         db.Entry(ticket).State = EntityState.Modified;
                         db.SaveChanges(); 

@@ -449,7 +449,8 @@ body{position:relative;}
 /********************************** Theme Left Panel Style Close Here ******************************/
 /*************************** 4.2 Theme Content Section Style Start Here ********************************/
 #main-content {
-    margin-left: 230px;
+    /*margin-left: 230px;*/
+    margin-left: 115px;
 	position:relative;
 }
 /******************* Theme Content Section Style Close Here *******************************/

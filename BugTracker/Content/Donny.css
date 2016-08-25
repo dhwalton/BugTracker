@@ -166,3 +166,29 @@
 #ticket-history tr:nth-child(even){
     background-color: rgba(0,0,0,0.1);
 }
+
+#project-tickets {
+    background-color: #fff;
+    border: 1px solid silver;
+}
+
+#project-tickets td:first-child {
+    padding-left: 1em;
+}
+
+#project-tickets th {
+    padding: 1em;
+}
+
+#project-tickets a {
+    color: blueviolet;
+    text-decoration: underline;
+}
+
+.ticket-name {
+    font-weight: 700;
+}
+
+.notification-message {
+
+}

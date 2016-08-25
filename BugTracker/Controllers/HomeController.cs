@@ -14,10 +14,21 @@ namespace BugTracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         private UserRolesHelper rolesHelper = new UserRolesHelper();
 
+        [Authorize]
+        public ActionResult Dashboard()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            return View(user);
+        }
+
         public ActionResult Index()
         {
-            
-            
+            // if the user is logged in, redirect to the dashboard
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Dashboard");
+            }
+
             return View();
         }
 
