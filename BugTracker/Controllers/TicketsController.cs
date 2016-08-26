@@ -13,58 +13,17 @@ using System.IO;
 
 namespace BugTracker.Controllers
 {
-    [Authorize(Roles = "Admin, Project Manager, Developer, Submitter")]
+    [Authorize(Roles = "Admin, Project Manager, Developer, Submitter, Demo Admin, Demo Project Manager, Demo Developer, Demo Submitter")]
     public class TicketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
-        // sorts tickets by column - might possibly add ascending/descending functionality later
-        private IQueryable<Tickets> SortTicketsBy(IQueryable<Tickets> tickets, string orderby)
-        {
-            // I'm sure there's a better way to do this...
-            switch (orderby)
-            {
-                case "priority":
-                    // higher priority tickets are higher on the list
-                    tickets = tickets.OrderByDescending(t => t.TicketPriorityId);
-                    break;
-                case "updated":
-                    tickets = tickets.OrderBy(t => t.Updated);
-                    break;
-                case "status":
-                    tickets = tickets.OrderBy(t => t.TicketStatusId);
-                    break;
-                case "project":
-                    tickets = tickets.OrderBy(t => t.Project.Name);
-                    break;
-                case "title":
-                    tickets = tickets.OrderBy(t => t.Title);
-                    break;
-                case "type":
-                    tickets = tickets.OrderBy(t => t.TicketTypeId);
-                    break;
-                case "assigned":
-                    tickets = tickets.OrderBy(t => t.AssignedUser.Displayname);
-                    break;
-                case "submitted":
-                    tickets = tickets.OrderBy(t => t.OwnerUser.Displayname);
-                    break;
-                case "created":
-                    tickets = tickets.OrderBy(t => t.Created);
-                    break;
-                default:
-                    tickets = tickets.OrderByDescending(t => t.TicketPriorityId);
-                    break;
-            }
-            return tickets;
-        }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(int? page, string searchStr)
         {
-            ViewBag.UserId = User.Identity.GetUserId();
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.UserId = user.Id;
 
             int pageSize = 5;
             int pageNumber = (page ?? 1);
@@ -86,6 +45,11 @@ namespace BugTracker.Controllers
                 .Include(t => t.TicketType)
                 .OrderByDescending(t => t.TicketPriorityId);
 
+            if (user.isDemoUser())
+            {
+                tickets = tickets.Where(t => t.Project.DemoProject == true).OrderByDescending(t => t.TicketPriorityId);
+            }
+
             return View(tickets.ToPagedList(pageNumber, pageSize));
         }
 
@@ -103,7 +67,7 @@ namespace BugTracker.Controllers
                 .Include(t => t.TicketType);
 
             // sort the ticket list
-            tickets = SortTicketsBy(tickets, orderby);
+            //tickets = SortTicketsBy(tickets, orderby);
 
             return View(tickets);
         }
@@ -126,13 +90,13 @@ namespace BugTracker.Controllers
                 .Include(t => t.TicketType);
 
             // sort the ticket list
-            tickets = SortTicketsBy(tickets, orderby);
+            //tickets = SortTicketsBy(tickets, orderby);
 
             return View(tickets.ToList());
         }
 
         [HttpGet]
-        [Authorize (Roles="Admin, Project Manager, Developer")]
+        [Authorize (Roles="Admin, Project Manager, Developer, Demo Admin, Demo Developer, Demo Project Manager")]
         public ActionResult ProjectTickets()
         {
             ViewBag.UserId = User.Identity.GetUserId();
@@ -157,6 +121,7 @@ namespace BugTracker.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Project Manager, Developer, Demo Admin, Demo Developer, Demo Project Manager")]
         public ActionResult AssignedTickets(string orderby)
         {
             ViewBag.UserId = User.Identity.GetUserId();
@@ -181,13 +146,9 @@ namespace BugTracker.Controllers
         // GET: Tickets
         public ActionResult Index(int? page)
         {
-            
-
             ViewBag.UserId = User.Identity.GetUserId();
-            ViewBag.User = db.Users.Find(User.Identity.GetUserId());
-
-            int pageSize = 50;
-            int pageNumber = (page ?? 1);
+            var user = db.Users.Find(User.Identity.GetUserId());
+            ViewBag.User = user;
 
             // start with a list of all tickets
             var tickets = db.Tickets
@@ -198,7 +159,22 @@ namespace BugTracker.Controllers
                 .Include(t => t.TicketType)
                 .OrderByDescending(t => t.TicketPriorityId);
 
-            return View(tickets.ToPagedList(pageNumber, pageSize));
+            // demo users will see different tickets than regular users
+            // admins can see every ticket
+            if (!User.IsInRole("Admin")) {
+                if (user.isDemoUser())
+                {
+                    // demo users can only see demo tickets
+                    tickets = tickets.Where(t => t.Project.DemoProject == true).OrderByDescending(t => t.TicketPriorityId);
+                }
+                else
+                {
+                    // "real" non-admin users can only see non-demo tickets
+                    tickets = tickets.Where(t => t.Project.DemoProject == false).OrderByDescending(t => t.TicketPriorityId);
+                }
+            }
+
+            return View(tickets.ToList());
         }
 
         public ActionResult RemoveAssignedUserFromTicket(int ticketId)
@@ -222,7 +198,7 @@ namespace BugTracker.Controllers
             
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index");
             }
 
             Tickets tickets = db.Tickets.Find(id);
@@ -237,15 +213,23 @@ namespace BugTracker.Controllers
                 ViewBag.CommentAttachmentRights = false;
             }
 
+            // keep demo users out of "real" tickets and vice versa
+            if ((tickets.Project.DemoProject && !user.isDemoUser())
+                || tickets.Project.DemoProject && !user.isDemoUser())
+            {
+                return RedirectToAction("Index");
+            }
+
             if (tickets == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return RedirectToAction("Index");
             }
             return View(tickets);
         }
 
         // GET: Tickets/Create
-        [Authorize(Roles = "Admin, Developer, Project Manager, Submitter")]
+        [Authorize(Roles = "Admin, Developer, Project Manager, Submitter, Demo Admin, Demo Developer, Demo Project Manager, Demo Submitter")]
         public ActionResult Create()
         {
             ViewBag.AssignedUserId = new SelectList(db.Users, "Id", "FirstName");
@@ -299,22 +283,23 @@ namespace BugTracker.Controllers
             var pHelper = new ProjectsHelper();
 
             var userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
             var ticket = db.Tickets.Find(id);
+            var canEditTicket = tHelper.CanEditTicket(userId, id ?? 1);
 
-            
-            //var user = db.Users.Find(User.Identity.GetUserId());
+            // keep demo users out of "real" tickets and vice versa
+            if ((ticket.Project.DemoProject && !user.isDemoUser())
+                || !ticket.Project.DemoProject && user.isDemoUser())
+            {
+                return RedirectToAction("Index");
+            }
 
-            // kick out devs and PMs who don't meet the criteria to edit this ticket
-            //if (!uHelper.IsUserInRole(userId, "Admin") 
-            //    && ((!uHelper.IsUserInRole(userId, "Project Manager") && !tHelper.UserIsAssignedTicket(id ?? 1, userId))
-            //    && ticket.Project.ManagerId != userId))
-            if (!tHelper.CanEditTicket(userId, id ?? 1))
+
+            if (!canEditTicket)
             {
                 return RedirectToAction("Details", new { id = id });
                 //return RedirectToAction("Index");
             }
-
-            
 
             Tickets tickets = db.Tickets.Find(id);
             if (tickets == null)
@@ -322,7 +307,7 @@ namespace BugTracker.Controllers
                 return HttpNotFound();
             }
 
-            if (tHelper.CanEditTicket(userId, id ?? 1) || tHelper.UserOwnsTicket(id ?? 1, userId))
+            if (canEditTicket || tHelper.UserOwnsTicket(id ?? 1, userId))
             {
                 ViewBag.CommentAttachmentRights = true;
             }
@@ -330,7 +315,8 @@ namespace BugTracker.Controllers
             {
                 ViewBag.CommentAttachmentRights = false;
             }
-            if (tHelper.CanEditTicket(userId,id ?? 1) && !User.IsInRole("Admin") && !User.IsInRole("Project Manager"))
+
+            if (canEditTicket && !User.IsInRole("Admin") && !User.IsInRole("Project Manager") && !User.IsInRole("Demo Admin"))
             {
                 ViewBag.FullEditPermission = false;
             }
@@ -418,7 +404,7 @@ namespace BugTracker.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, Developer, Project Manager, Submitter")]
+        [Authorize(Roles = "Admin, Developer, Project Manager, Submitter, Demo Admin, Demo Submitter, Demo Project Manager, Demo Developer")]
         public ActionResult UploadTicketAttachment(int ticketId, string description, HttpPostedFileBase attachment)
         {
             var helper = new TicketsHelper();

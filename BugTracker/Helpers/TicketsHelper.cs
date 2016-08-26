@@ -103,10 +103,15 @@ public class TicketsHelper
         return tickets;
     }
 
+
+    // test to see whether or not a user can edit a ticket
     public bool CanEditTicket(string userId, int ticketId)
     {
         var ticket = db.Tickets.Find(ticketId);
         var user = db.Users.Find(userId);
+
+        // demo admins can edit demo tickets
+        if (ticket.Project.DemoProject && user.inRole("Demo Admin")) return true;
 
         // admins can edit all tickets
         if (user.inRole("Admin")) return true;
@@ -124,9 +129,16 @@ public class TicketsHelper
     // generate a list of tickets assigned to a user
     public IList<Tickets>TicketsAssignedToUser(string userId)
     {
-        var user = db.Users.Find(userId);
-        var tickets = db.Tickets.Where(t => t.AssignedUser == user).ToList();
+       // var user = db.Users.Find(userId);
+        var tickets = db.Tickets.Where(t => t.AssignedUserId == userId).ToList();
         return tickets;
+    }
+
+    // generate a list of ticket comments from a user's assigned tickets
+    public IList<TicketComments> AssignedTicketComments(string userId)
+    {
+        var comments = db.TicketComments.Where(c => c.Tickets.AssignedUserId == userId);
+        return comments.ToList();
     }
 
     // generate a list of tickets assigned to a user in a specific project

@@ -17,7 +17,11 @@ namespace BugTracker.Controllers
         [Authorize]
         public ActionResult Dashboard()
         {
+            var helper = new TicketsHelper();
             var user = db.Users.Find(User.Identity.GetUserId());
+            user.Notifications = user.Notifications.OrderBy(n => n.IsRead).ToList();
+            ViewBag.UserTickets = helper.TicketsAssignedToUser(user.Id).OrderByDescending(t => t.Updated).ToList();
+            ViewBag.TicketComments = helper.AssignedTicketComments(user.Id).OrderByDescending(c => c.Created).ToList();
             return View(user);
         }
 

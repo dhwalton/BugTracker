@@ -25,16 +25,27 @@ namespace BugTracker.Models
     public class UsersAndRolesModel
     {
 
-        public UsersAndRolesModel()
+        public UsersAndRolesModel(bool demo)
         {
             var db = new ApplicationDbContext();
             var urHelper = new UserRolesHelper();
             Roles = urHelper.ListAllRoles();
-            Users = db.Users.ToList();
+            if (demo)
+            {
+                Users = db.Users.Where(u => u.Displayname.Contains("Demo")).ToList();
+                Demo = true;
+            }
+            else
+            {
+                Users = db.Users.Where(u => u.Displayname.Contains("Demo") == false).ToList();
+                Demo = false;
+            }
+            
         }
         
         public IList<ApplicationUser> Users { get; set; }
         public IList<IdentityRole> Roles { get; set; }
+        public bool Demo { get; set; }
         public string[] SelectedRoles { get; set; }
     }
 

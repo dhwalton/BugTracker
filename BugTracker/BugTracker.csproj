@@ -551,6 +551,8 @@
     <Content Include="Views\Shared\_TicketHistory.cshtml" />
     <Content Include="Views\Shared\_NotificationsMenuItem.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Projects\UserManagerDemo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

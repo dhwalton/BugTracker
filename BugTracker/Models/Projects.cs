@@ -24,6 +24,9 @@ namespace BugTracker.Models
         public DateTimeOffset StartDate { get; set; }
         public string ManagerId { get; set; }
 
+        // is this project for the demo accounts?
+        public bool DemoProject { get; set; }
+
         //public virtual ApplicationUser Manager { get; set; }
         public virtual ICollection<ApplicationUser> Users { get; set; }
         public virtual ICollection<Tickets> Tickets { get; set; }

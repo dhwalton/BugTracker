@@ -43,7 +43,24 @@ namespace BugTracker.Models
                         usersInProperRoles = urHelper.UsersInRole("Developer");
                     }
                 }
-                
+
+
+                // List for demo
+                if (urHelper.IsUserInRole(userId, "Demo Admin"))
+                {
+                    if (string.IsNullOrWhiteSpace(Project.ManagerId))
+                    {
+                        // Project manager MUST be assigned if there isn't one on the project
+                        usersInProperRoles = urHelper.UsersInRole("Demo Project Manager");
+                    }
+                    else
+                    {
+                        // Developers are assigned if the project has a manager
+                        usersInProperRoles = urHelper.UsersInRole("Demo Developer");
+                    }
+                }
+
+
 
                 // a null list means this user is not an Admin/PM, they will not have access to
                 // the ability to add/remove users from projects

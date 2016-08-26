@@ -24,6 +24,12 @@ namespace BugTracker.Models
             // attachments, comments, histories, notifications, projects
         }
 
+        public bool isDemoUser()
+        {
+            var h = new UserRolesHelper();
+            return h.isDemoUser(Id);
+        }
+
         // is user a PM?
         public bool IsPM()
         {

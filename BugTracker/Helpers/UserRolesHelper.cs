@@ -145,6 +145,16 @@ public class UserRolesHelper
             return manager.FindByName(Name);
         }
 
-
+    public bool isDemoUser(string userId)
+    {
+        if (manager.IsInRole(userId,"Demo Admin") ||
+            manager.IsInRole(userId,"Demo Project Manager") || 
+            manager.IsInRole(userId,"Demo Developer") ||
+            manager.IsInRole(userId,"Demo Submitter"))
+        {
+            return true;
+        }
+        return false;
+    }
 
 }

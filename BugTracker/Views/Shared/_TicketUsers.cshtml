@@ -10,11 +10,11 @@
             {
                 <tr>
                     <td>
-                        @if (user.IsPM())
+                        @if (user.IsPM() || user.inRole("Demo Project Manager"))
                     {
                             <span class="pm">PM</span>
                         }
-                        @if (user.IsDev())
+                        @if (user.IsDev() || user.inRole("Demo Developer"))
                     {
                             <span class="dev">Dev</span>
                         }

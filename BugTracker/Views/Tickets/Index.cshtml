@@ -1,6 +1,6 @@
 ﻿@using PagedList
 @using PagedList.Mvc
-@model IPagedList<BugTracker.Models.Tickets>
+@model IEnumerable<BugTracker.Models.Tickets>
 
 @{
     ViewBag.Title = "Index";
@@ -74,7 +74,7 @@
             </td>
             <td>
                
-                @if (ViewBag.UserId == item.AssignedUserId || User.IsInRole("Admin") || (User.IsInRole("Project Manager") && item.Project.Users.Contains(ViewBag.User)))
+                @if (ViewBag.UserId == item.AssignedUserId || User.IsInRole("Admin") || ViewBag.UserId == item.Project.ManagerId || User.IsInRole("Demo Admin"))
                 {
                     @Html.ActionLink("Edit", "Edit", new { id=item.Id })
                 }

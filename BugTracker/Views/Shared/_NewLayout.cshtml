@@ -105,19 +105,19 @@
             <li class="dropdown">
                 @if (User.Identity.IsAuthenticated) {
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("Demo Admin"))
                     {
                         <img src="../../assets/images/admin.png" alt="" width="30" class="img-circle">
                     }
-                    else if (User.IsInRole("Project Manager"))
+                    else if (User.IsInRole("Project Manager") || User.IsInRole("Demo Project Manager"))
                     {
                         <img src="../../assets/images/pm.png" alt="" width="30" class="img-circle">
                     }
-                    else if (User.IsInRole("Developer"))
+                    else if (User.IsInRole("Developer") || User.IsInRole("Demo Developer"))
                     {
                         <img src="../../assets/images/dev.png" alt="" width="30" class="img-circle">
                     }
-                    else if (User.IsInRole("Submitter"))
+                    else if (User.IsInRole("Submitter") || User.IsInRole("Demo Submitter"))
                     {
                         <img src="../../assets/images/sub.png" alt="" width="30" class="img-circle">
                     }
@@ -160,7 +160,7 @@
                         </a>
                     </li>
 
-                    @if (User.IsInRole("Admin")) {
+                    @if (User.IsInRole("Admin") || User.IsInRole("Demo Admin")) {
                     <li class="">
                         <a href="~/Projects/UserManager">
                             <i class="fa fa-user-secret"></i>
@@ -170,7 +170,7 @@
                     </li>
                     }
 
-                    @if (User.IsInRole("Admin") || User.IsInRole("Developer") || User.IsInRole("Project Manager")) {
+                    @if (User.IsInRole("Admin") || User.IsInRole("Developer") || User.IsInRole("Project Manager") || User.IsInRole("Demo Admin") || User.IsInRole("Demo Project Manager") || User.IsInRole("Demo Developer")) {
                         <!-- Projects -->
                         <li class="hoe-has-menu">
                             <a href="#">
@@ -180,7 +180,7 @@
                             </a>
                             
                             <ul class="hoe-sub-menu">
-                                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Demo Admin") || User.IsInRole("Demo Project Manager"))
                                 {
                                     <li>
                                         <a href="~/Projects/Create">
@@ -190,7 +190,7 @@
                                     </li>
                                 }
 
-                                @if (User.IsInRole("Admin")) {
+                                @if (User.IsInRole("Admin") || User.IsInRole("Demo Admin")) {
                                     <li>
                                         <a href="~/Projects">
                                             <span class="menu-text">View All Projects</span>
@@ -199,7 +199,7 @@
                                     </li>
                                 }
 
-                                @if(User.IsInRole("Project Manager") || User.IsInRole("Developer")) {
+                                @if(User.IsInRole("Project Manager") || User.IsInRole("Developer") || User.IsInRole("Demo Project Manager") || User.IsInRole("Demo Developer")) {
                                     <li class="~/Projects">
                                         <a href="~/Projects">
                                             <span class="menu-text">My Projects</span>
@@ -225,7 +225,7 @@
                                     <span class="selected"></span>
                                 </a>
                             </li>
-                            @if (User.IsInRole("Submitter")) {
+                            @if (User.IsInRole("Submitter") || User.IsInRole("Demo Submitter")) {
                                 <li>
                                     <a href="~/Tickets/Create">
                                         <span class="menu-text">
@@ -242,7 +242,7 @@
                                     </a>
                                 </li>
                             }
-                            @if (User.IsInRole("Developer") || User.IsInRole("Project Manager"))
+                            @if (User.IsInRole("Developer") || User.IsInRole("Project Manager") || User.IsInRole("Demo Developer"))
                             {
                                 <li class="hoe-sub-menu">
                                     <a href="~/Tickets/AssignedTickets">

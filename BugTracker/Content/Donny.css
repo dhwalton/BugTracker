@@ -185,10 +185,27 @@
     text-decoration: underline;
 }
 
-.ticket-name {
+.ticket-name, .strong {
     font-weight: 700;
 }
 
 .notification-message {
 
+}
+
+.stream-danger a {
+    color: #f00;
+}
+
+.stream-danger a:hover {
+    color: #970a0a;
+}
+
+.panel {
+    box-shadow: 0px 0px 2px rgba(0,0,0,0.15);
+}
+
+.app-title {
+    padding: 1em;
+    background-color: rgba(0,0,0,0);
 }

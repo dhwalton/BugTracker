@@ -18,11 +18,11 @@
     {
         <tr>
             <td>
-                @if (Model.Manager.IsPM())
+                @if (Model.Manager.IsPM() || Model.Manager.inRole("Demo Project Manager"))
                 {
                     <span class="pm">PM</span>
                 }
-                @if (Model.Manager.IsDev())
+                @if (Model.Manager.IsDev() || Model.Manager.inRole("Demo Developer"))
                 {
                     <span class="dev">Dev</span>
                 }
@@ -49,7 +49,7 @@
                 {
                     <span class="pm">PM</span>
                 }*@
-                @if (user.IsDev())
+                @if (user.IsDev() || user.inRole("Demo Developer"))
                 {
                     <span class="dev">Dev</span>
                 }

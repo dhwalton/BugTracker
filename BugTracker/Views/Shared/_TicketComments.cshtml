@@ -8,7 +8,7 @@
             
             <div class="ticket-comment">
                 <p class="ticket-comment-author">
-                    @if(comment.User.inRole("Admin"))
+                    @if(comment.User.inRole("Admin") || comment.User.inRole("Demo Admin"))
                     {
                         <span class="admin">Admin</span>
                     }
@@ -18,7 +18,7 @@
                         <span class="pm">PM</span>
                     }
 
-                    @if (comment.User.IsDev())
+                    @if (comment.User.IsDev() || comment.User.inRole("Demo Developer"))
                     {
                         <span class="dev">Dev</span>
                     }

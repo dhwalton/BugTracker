@@ -93,6 +93,49 @@ namespace BugTracker.Controllers
             }
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> DemoLogin(int roleIndex)
+        {
+            var model = new LoginViewModel();
+            model.Password = "Testing123!";
+            switch (roleIndex)
+            {
+                case 1:
+                    // login as demo admin
+                    model.Email = "AdminDemo@test.test";
+                    break;
+                case 2:
+                    // login as demo PM
+                    model.Email = "PMDemo@test.test";
+                    break;
+                case 3:
+                    // login as demo dev
+                    model.Email = "DevDemo@test.test";
+                    break;
+                case 4:
+                default:
+                    // login as demo submitter
+                    model.Email = "SubmitterDemo@test.test";
+                    break;
+            }
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToAction("Dashboard","Home");
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.RequiresVerification:
+                    //return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
+            }
+        }
+
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
