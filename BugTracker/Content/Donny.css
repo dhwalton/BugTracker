@@ -88,6 +88,7 @@
 
 #ticket-users {
     padding: 1em;
+    min-height: 6em;
 }
 
 .attachment-img img {
@@ -100,7 +101,7 @@
 }
 
 #ticket-attachments textarea, #ticket-comments textarea {
-    width: 50%;
+    width: 100%;
 }
 
 .alert {
@@ -208,4 +209,28 @@
 .app-title {
     padding: 1em;
     background-color: rgba(0,0,0,0);
+}
+
+.statistic-widget-box a {
+    color: #fff;
+}
+
+.role-title {
+
+}
+
+#bug {
+    /*background-color: #fff;*/
+    background: url("../assets/images/bug3.svg");
+    background-repeat: no-repeat;
+    background-size: 170px;
+    background-position-x: right;
+    background-position-y: -10px;
+}
+
+.partial-button {
+    margin: 1em 0;
+    font-weight: 700;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.55);
+    min-width: 10em;
 }

@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace BugTracker.Controllers
 {
-    
+    [RequireHttps]
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -19,9 +19,21 @@ namespace BugTracker.Controllers
         {
             var helper = new TicketsHelper();
             var user = db.Users.Find(User.Identity.GetUserId());
+
+            var userTickets = helper.TicketsAssignedToUser(user.Id)
+                               .Union(db.Tickets.Where(t => t.Project.ManagerId == user.Id))
+                               .Union(db.Tickets.Where(t => t.OwnerUserId == user.Id))
+                               .OrderByDescending(t => t.Updated);
+            var userTicketComments = db.TicketComments
+                                       .Where(c => c.Tickets.AssignedUserId == user.Id)
+                                       .Union(db.TicketComments.Where(c => c.Tickets.Project.ManagerId == user.Id))
+                                       .Union(db.TicketComments.Where(c => c.Tickets.OwnerUserId == user.Id))
+                                       .OrderByDescending(c => c.Created);
+
             user.Notifications = user.Notifications.OrderBy(n => n.IsRead).ToList();
-            ViewBag.UserTickets = helper.TicketsAssignedToUser(user.Id).OrderByDescending(t => t.Updated).ToList();
+            ViewBag.UserTickets = userTickets.ToList();
             ViewBag.TicketComments = helper.AssignedTicketComments(user.Id).OrderByDescending(c => c.Created).ToList();
+            //ViewBag.TicketComments = userTicketComments;
             return View(user);
         }
 

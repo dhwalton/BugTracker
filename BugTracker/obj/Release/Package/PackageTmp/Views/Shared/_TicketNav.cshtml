@@ -1,0 +1,28 @@
+﻿<p class="ticket-nav">
+    @Html.ActionLink("All Tickets","Index")
+
+    @if (User.IsInRole("Submitter"))
+    {
+        @Html.ActionLink("Create New", "Create")
+
+        @Html.ActionLink("My Submitted Tickets", "SubmittedTickets")
+    }
+
+    @if (User.IsInRole("Project Manager") || User.IsInRole("Developer"))
+    {
+        @Html.ActionLink("My Assigned Tickets", "AssignedTickets")
+    }
+
+    @if (User.IsInRole("Project Manager"))
+    {
+        @Html.ActionLink("Tickets for My Projects", "ProjectTickets")
+    }
+
+    @*@using (Html.BeginForm()) {
+            @Html.AntiForgeryToken();
+            @Html.Label("Search")
+            <span>&nbsp;</span>
+            @Html.TextBox("searchStr")
+            <input type="submit" value="Go" />
+        }*@
+</p>

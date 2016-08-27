@@ -9,19 +9,20 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Tickets</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.OwnerUserId)
         @Html.HiddenFor(model => model.AssignedUserId)
         @Html.HiddenFor(model => model.ProjectId)
 
         <div class="form-group">
             @Html.LabelFor(model => model.OwnerUserId, "Submitter", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @if (Model.OwnerUser != null) { 
+                @if (Model.OwnerUser != null) {
                     @Html.Label(Model.OwnerUser.Displayname, htmlAttributes: new { @class = "control-label" })
                 }
                 @*@Html.DropDownList("OwnerUserId", null, htmlAttributes: new { @class = "form-control" })
@@ -82,8 +83,15 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TicketTypeId, "TicketTypeId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.TicketTypeId, "", new { @class = "text-danger" })
+                @if (ViewBag.FullEditPermission) {
+                    @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TicketTypeId, "", new { @class = "text-danger" })
+                }
+                else
+                {
+                    @Html.Label(Model.TicketType.Name, htmlAttributes: new { @class = "control-label" })
+                    @Html.HiddenFor(model => model.TicketTypeId)
+                }
             </div>
         </div>
 
@@ -91,21 +99,42 @@
 
             @Html.LabelFor(model => model.TicketPriorityId, "TicketPriorityId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.TicketPriorityId, "", new { @class = "text-danger" })
+                @if (ViewBag.FullEditPermission) {
+                    @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TicketPriorityId, "", new { @class = "text-danger" })
+                }
+                else
+                {
+                    @Html.Label(Model.TicketPriority.Name, htmlAttributes: new { @class = "control-label" })
+                    @Html.HiddenFor(model => model.TicketPriorityId)
+                }
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.TicketStatusId, "TicketStatusId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.TicketStatusId, "", new { @class = "text-danger" })
+                @if (ViewBag.FullEditPermission)
+                {
+                    @Html.DropDownList("TicketStatusId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TicketStatusId, "", new { @class = "text-danger" })
+                }
+                else
+                {
+                    @Html.Label(Model.TicketStatus.Name, htmlAttributes: new { @class = "control-label" })
+                    @Html.HiddenFor(model => model.TicketStatusId)
+                }
             </div>
         </div>
 
         <div class="form-group">
-            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @if (ViewBag.FullEditPermission)
             {
                 @Html.Partial("_TicketUsers")
             }
@@ -122,18 +151,21 @@
                         @Html.Label("Unassigned", htmlAttributes: new { @class = "control-label unassigned-ticket" })
                     }
                 </div>
-            }     
+            }
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
     </div>
 }
-
+@Html.Partial("_TicketAttachments")
 @Html.Partial("_TicketComments")
+@Html.Partial("_TicketHistory")
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+@section Scripts {
+<script>
+        $(document).ready(function () {
+            $('#ticket-history').DataTable();
+        });
+</script>
+}

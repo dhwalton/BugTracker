@@ -92,8 +92,17 @@
 
     </dl>
 </div>
+@Html.Partial("_TicketAttachments")
 @Html.Partial("_TicketComments")
+@Html.Partial("_TicketHistory")
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#ticket-history').DataTable();
+        });
+    </script>
+}

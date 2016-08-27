@@ -13,6 +13,7 @@ using System.IO;
 
 namespace BugTracker.Controllers
 {
+    [RequireHttps]
     [Authorize(Roles = "Admin, Project Manager, Developer, Submitter, Demo Admin, Demo Project Manager, Demo Developer, Demo Submitter")]
     public class TicketsController : Controller
     {
@@ -202,6 +203,7 @@ namespace BugTracker.Controllers
             }
 
             Tickets tickets = db.Tickets.Find(id);
+            var tHelper = new TicketsHelper();
 
             var user = db.Users.Find(User.Identity.GetUserId());
             if (user.CanEditTicket(id ?? 1) || user.OwnsTicket(id ?? 1))
@@ -225,6 +227,10 @@ namespace BugTracker.Controllers
                 //return HttpNotFound();
                 return RedirectToAction("Index");
             }
+
+            // clear any notifications that the user might have for this ticket
+            tHelper.clearNotifications(id ?? 1, user.Id);
+
             return View(tickets);
         }
 
@@ -237,6 +243,17 @@ namespace BugTracker.Controllers
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
             ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name");
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
+
+            IQueryable project = null;
+            if (User.IsInRole("Demo Submitter") || User.IsInRole("Demo Admin") || User.IsInRole("Demo Project Manager") || User.IsInRole("Demo Developer"))
+            {
+                project = db.Projects.Where(p => p.DemoProject);
+            }
+            else
+            {
+                project = db.Projects.Where(p => p.DemoProject == false);
+            }
+            ViewBag.ProjectId = new SelectList(project, "Id", "Name");
             return View();
         }
 
@@ -316,7 +333,7 @@ namespace BugTracker.Controllers
                 ViewBag.CommentAttachmentRights = false;
             }
 
-            if (canEditTicket && !User.IsInRole("Admin") && !User.IsInRole("Project Manager") && !User.IsInRole("Demo Admin"))
+            if (canEditTicket && !User.IsInRole("Admin") && !User.IsInRole("Demo Project Manager") && !User.IsInRole("Project Manager") && !User.IsInRole("Demo Admin"))
             {
                 ViewBag.FullEditPermission = false;
             }

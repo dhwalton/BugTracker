@@ -137,7 +137,8 @@ public class TicketsHelper
     // generate a list of ticket comments from a user's assigned tickets
     public IList<TicketComments> AssignedTicketComments(string userId)
     {
-        var comments = db.TicketComments.Where(c => c.Tickets.AssignedUserId == userId);
+        var comments = db.TicketComments.Where(c => c.Tickets.AssignedUserId == userId)
+                          .Union(db.TicketComments.Where(c => c.Tickets.Project.ManagerId == userId));
         return comments.ToList();
     }
 

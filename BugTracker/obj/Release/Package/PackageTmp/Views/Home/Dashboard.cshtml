@@ -1,0 +1,255 @@
+﻿@model BugTracker.Models.ApplicationUser
+
+@*<section id="main-content">
+    <div class="space-30"></div>
+    <div class="container">*@
+        <div class="row">
+
+            <!-- TICKET NOTIFICATIONS -->
+            <div class="col-md-6">
+                <div class="panel">
+                    <header class="panel-heading">
+                        <div class="panel-actions">
+                            <a href="javascript:void(0)" class="panel-action panel-action-toggle" data-panel-toggle=""></a>
+                            @*<a href="javascript:void(0)" class="panel-action panel-action-dismiss" data-panel-dismiss=""></a>*@
+                            <div class="dropdown pull-left">
+                                @*<a href="" data-toggle="dropdown" class="dropdown-toggle"><i class="ion-more"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-scale">
+                                    <li><a href="javascript:void(0)">Action</a></li>
+                                    <li><a href="javascript:void(0)">Just Action</a></li>
+                                    <li><a href="javascript:void(0)">Action Now</a></li>
+                                </ul>*@
+                            </div>
+                        </div>
+                        <h2 class="panel-title">Recent Notifications</h2>
+                    </header>
+                    <div class="panel-body">
+                        <div class="scrollDiv">
+                            <div class="streamline">
+                                @foreach (var notification in Model.Notifications.Take(10))
+                                {
+                                    if (notification.IsRead)
+                                    {
+                                        <div class="stream-item stream-primary">
+                                            <div class="stream-content">
+                                                @*<small class="text-muted">34 mins ago</small>*@
+                                                <p><a href="@Url.Action("Edit","Tickets", new { id = @notification.TicketId })"><span class="ticket-name">@notification.Ticket.Title</span></a>: <span class="notification-message">@notification.Message</span></p>
+                                            </div>
+                                        </div><!-- .stream-item -->
+                                    }
+                                    else
+                                    {
+                                        <div class="stream-item stream-danger">
+                                            <div class="stream-content">
+                                                @*<small class="text-muted">34 mins ago</small>*@
+                                                <p><a href="@Url.Action("Edit","Tickets", new { id = @notification.TicketId })"><span class="ticket-name">@notification.Ticket.Title</span></a>: <span class="notification-message">@notification.Message</span></p>
+                                            </div>
+                                        </div><!-- .stream-item -->
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div><!--end panel body-->
+                </div><!--end panel-->
+            </div><!--end col 6-->
+            <!-- END TICKET NOTIFICATIONS -->
+
+            <!-- ASSIGNED TICKETS -->
+            <div class="col-md-6">
+                <div class="panel">
+                    <header class="panel-heading">
+                        <div class="panel-actions">
+                            <a href="javascript:void(0)" class="panel-action panel-action-toggle" data-panel-toggle=""></a>
+                            @*<a href="javascript:void(0)" class="panel-action panel-action-dismiss" data-panel-dismiss=""></a>*@
+                            <div class="dropdown pull-left">
+                                @*<a href="" data-toggle="dropdown" class="dropdown-toggle"><i class="ion-more"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-scale">
+                                    <li><a href="javascript:void(0)">Action</a></li>
+                                    <li><a href="javascript:void(0)">Just Action</a></li>
+                                    <li><a href="javascript:void(0)">Action Now</a></li>
+                                </ul>*@
+                            </div>
+                        </div>
+                        <h2 class="panel-title">My Assigned Tickets</h2>
+                    </header>
+                    <div class="panel-body">
+                        <div class="scrollDiv">
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr>
+                                        <th><div>Status</div></th>
+                                        <th><div>Subject</div></th>
+                                        <th align="center"><div>Priority</div></th>
+                                        <th align="center"><div>Date</div></th>
+                                    </tr>
+                                   
+
+                                        @foreach (var ticket in ViewBag.UserTickets) { 
+                                    <tr>
+                                        <td>
+                                            
+                                                @if (ticket.TicketStatus.Name == "Closed")
+                                                {
+                                                    <span class="label label-danger">@ticket.TicketStatus.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="label label-success">@ticket.TicketStatus.Name</span>
+                                                }
+                                               
+                                        </td>
+                                        
+                                            <td><a href="@Url.Action("Edit","Tickets",new { id = ticket.Id })">@ticket.Title</a></td>
+                                        
+                                            <td align="center">@ticket.TicketPriority.Name</td>
+                                            <td nowrap="" align="center">
+                                                <span class="semibold">
+                                                    @if (ticket.Updated != null)
+                                                    {
+                                                        @ticket.Updated
+                                                    }
+                                                    else
+                                                    {
+                                                        @ticket.Created
+                                                    }
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!--end panel body-->
+                </div><!--end panel-->
+            </div><!--end col 6-->
+            <!-- END ASSIGNED TICKETS -->
+            
+
+        </div><!--end row-->
+        <div class="row">
+
+            <!-- BEGIN TICKET COMMENTS -->
+            <div class="col-md-12">
+                <div class="panel">
+                    <header class="panel-heading">
+                        <div class="panel-actions">
+                            <a href="javascript:void(0)" class="panel-action panel-action-toggle" data-panel-toggle=""></a>
+                            @*<a href="javascript:void(0)" class="panel-action panel-action-dismiss" data-panel-dismiss=""></a>*@
+                            <div class="dropdown pull-left">
+                                @*<a href="" data-toggle="dropdown" class="dropdown-toggle"><i class="ion-more"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-scale">
+                                    <li><a href="javascript:void(0)">Action</a></li>
+                                    <li><a href="javascript:void(0)">Just Action</a></li>
+                                    <li><a href="javascript:void(0)">Action Now</a></li>
+                                </ul>*@
+                            </div>
+                        </div>
+                        <h2 class="panel-title">Recent Ticket Comments</h2>
+                    </header>
+                    <div class="panel-body">
+                        <div class="scrollDiv">
+                            <div class="media-group feeds-group">
+                                @foreach (var comment in ViewBag.TicketComments)
+                                {
+                                    <div class="media-group-item">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <div class="avatar">
+                                                    @if (comment.User.inRole("Admin") || comment.User.inRole("Demo Admin"))
+                                                    {
+                                                        <img src="../../assets/images/admin.png" alt="Administrator" title="Administrator" class="img-circle" width="40">
+                                                    }
+                                                    else if (comment.User.inRole("Project Manager") || comment.User.inRole("Demo Project Manager"))
+                                                    {
+                                                        <img src="../../assets/images/pm.png" alt="Project Manager" title="Project Manager" class="img-circle" width="40">
+
+                                                    }
+                                                    else if (comment.User.inRole("Developer") || comment.User.inRole("Demo Developer"))
+                                                    {
+                                                        <img src="../../assets/images/dev.png" alt="Developer" title="Developer" class="img-circle" width="40">
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="../../assets/images/sub.png" alt="Submitter" title="Submitter" class="img-circle" width="40">
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="media-body">
+                                                <h5><a href="@Url.Action("Edit","Tickets",new { id = @comment.Tickets.Id })" class="text-color">@comment.Comment</a></h5>
+                                                <small class="text-muted">@comment.Created by <span class="strong">@comment.User.Displayname</span></small>
+                                            </div>
+                                        </div>
+                                    </div><!-- .media-group-item -->
+                                }
+
+                                @*<div class="media-group-item">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <div class="avatar">
+                                                <img src="assets/images/avtar-2.jpg" alt="" class="img-circle" width="40">
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5><a href="javascript:void(0)" class="text-color">Here are just some of the magazine reviews we have had</a></h5>
+                                            <small class="text-muted">1 day ago</small>
+                                        </div>
+                                    </div>
+                                </div>*@<!-- .media-group-item -->
+
+                                @*<div class="media-group-item">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <div class="avatar">
+                                                <img src="assets/images/avtar-3.jpg" alt="" class="img-circle" width="40">
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5><a href="javascript:void(0)" class="text-color">Lorem ipsum dolor amet, consectetur adipisicing elit.</a></h5>
+                                            <small class="text-muted">2 days ago</small>
+                                        </div>
+                                    </div>
+                                </div>*@<!-- .media-group-item -->
+
+                                @*<div class="media-group-item">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <div class="avatar">
+                                                <img src="assets/images/avtar-4.jpg" alt="" class="img-circle" width="40">
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5><a href="javascript:void(0)" class="text-color">“It’s just brilliant. I will recommend it to everyone!”</a></h5>
+                                            <small class="text-muted">2 mins ago</small>
+                                        </div>
+                                    </div>
+                                </div>*@<!-- .media-group-item -->
+
+                                @*<div class="media-group-item">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <div class="avatar">
+                                                <img src="assets/images/avtar-5.jpg" alt="" class="img-circle" width="40">
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <h5><a href="javascript:void(0)" class="text-color">John has just started working on the project</a></h5>
+                                            <small class="text-muted">right now</small>
+                                        </div>
+                                    </div>
+                                </div>*@<!-- .media-group-item -->
+                            </div>
+                        </div>
+                    </div><!--end panel body-->
+                </div><!--end panel-->
+            </div><!--end col 6-->
+        </div><!--end row-->
+    @*</div><!--end container-->
+    <!--footer start-->
+    <div class="footer">
+        <div class="row">
+            <div class="col-sm-12">
+                <span>&copy; Copyright 2016.</span>
+            </div>
+        </div>
+    </div>
+    <!--footer end-->*@

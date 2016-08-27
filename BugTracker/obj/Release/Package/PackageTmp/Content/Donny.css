@@ -1,0 +1,236 @@
+﻿#user-list, .user-list, #project-tickets {
+    margin: 3em auto;
+    width: 90%;
+}
+
+#user-list td, .user-list td, #project-tickets td {
+    padding: 0.5em;
+}
+
+#user-list, #project-tickets {
+    color: #000;
+}
+
+#user-list tr:nth-child(even), .user-list tr:nth-child(even), #project-tickets tr:nth-child(even) {
+    /*background-color: #36c6d3;*/
+    background-color: #eee;
+   
+}
+
+#user-list tr:nth-child(even) a, .user-list tr:nth-child(even) a, #project-tickets tr:nth-child(even) a {
+   /*color: #000;*/
+   
+}
+
+.dev, .pm, .admin, .submitter {
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+    padding: 2px 4px;
+    border-radius: 0.25em;
+    font-weight: 700;
+    margin: 0 0.5em;
+}
+
+.dev {
+    color: #fff;
+    background-color: green;
+}
+
+.pm {
+    color: red;
+    background-color: yellow;
+}
+
+.admin {
+    color: #fff;
+    background-color: #f00;
+}
+
+.submitter {
+    color: #000;
+    background-color: #ccc;
+}
+
+#userlist-container {
+    margin-top: 1em;
+}
+
+.role {
+    padding: 0 0.75em 0 0;
+}
+
+.remove-manager {
+    font-size: 0.6em;
+    padding: 0.1em 0.3em;
+    border: 1px solid;
+    border-radius: 0.3em;
+    background-color: red;
+    
+}
+
+.remove-manager a {
+    color: #fff;
+    font-weight: 700;
+}
+
+.ticket-nav a {
+    margin-right: 2em;
+}
+
+.dropdown-margin-bump {
+    
+}
+
+#ticket-attachments, #ticket-comments, .ticket-attachment, #ticket-users {
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    padding-top: 1em;
+}
+
+#ticket-users {
+    padding: 1em;
+    min-height: 6em;
+}
+
+.attachment-img img {
+   max-height: 200px;
+   border-radius: 1em;
+   padding: 0.5em;    
+   border: 1px solid #ccc;
+   background-color: #fff;
+   box-shadow: 0px 0px 3px rgba(0,0,0,0.25);
+}
+
+#ticket-attachments textarea, #ticket-comments textarea {
+    width: 100%;
+}
+
+.alert {
+    padding: 1em;
+    border: 1px solid #eee;
+    background-color: crimson;
+    color: #fff;
+    border-radius: 1em;
+}
+
+.ticket-comment {
+    background-color: #fff;
+    padding: 1em;
+    border: 1px dashed silver;
+    margin: 0.5em 0;
+    border-radius: 1em;
+}
+
+.ticket-comment-author {
+    font-weight: 700;
+}
+
+.ticket-comment-body {
+    margin-left: 1em;
+}
+
+.ticket-comment-date {
+    font-style: italic;
+
+}
+
+.old, .new {
+    font-weight: 700;
+}
+
+.old {
+    color: blue;
+}
+
+.new {
+    color: red;
+}
+
+#ticket-history {
+    border: 1px solid silver;
+    width: 90%;
+    margin: 0 auto;
+}
+
+#ticket-history tr {
+    background-color: #fff;
+}
+
+#ticket-history > thead > tr {
+    background-color: #eee;
+    border-bottom: 1px solid silver;
+}
+
+#ticket-history tr > td:first-child {
+    padding-left: 1em;
+}
+
+#ticket-history tr:nth-child(even){
+    background-color: rgba(0,0,0,0.1);
+}
+
+#project-tickets {
+    background-color: #fff;
+    border: 1px solid silver;
+}
+
+#project-tickets td:first-child {
+    padding-left: 1em;
+}
+
+#project-tickets th {
+    padding: 1em;
+}
+
+#project-tickets a {
+    color: blueviolet;
+    text-decoration: underline;
+}
+
+.ticket-name, .strong {
+    font-weight: 700;
+}
+
+.notification-message {
+
+}
+
+.stream-danger a {
+    color: #f00;
+}
+
+.stream-danger a:hover {
+    color: #970a0a;
+}
+
+.panel {
+    box-shadow: 0px 0px 2px rgba(0,0,0,0.15);
+}
+
+.app-title {
+    padding: 1em;
+    background-color: rgba(0,0,0,0);
+}
+
+.statistic-widget-box a {
+    color: #fff;
+}
+
+h1.role-title {
+    font-size: 0.5rem;
+}
+
+#bug {
+    /*background-color: #fff;*/
+    background: url("../assets/images/bug3.svg");
+    background-repeat: no-repeat;
+    background-size: 170px;
+    background-position-x: right;
+    background-position-y: -10px;
+}
+
+.partial-button {
+    margin: 1em 0;
+    font-weight: 700;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.55);
+    min-width: 10em;
+}

@@ -1,27 +1,65 @@
 ﻿@model BugTracker.Models.Tickets
+<section id="ticket-comments">
+    <h4>Comments for this Ticket</h4>
+    @if (Model.TicketComments.Count > 0)
+    {
+        foreach (var comment in Model.TicketComments)
+        {
+            
+            <div class="ticket-comment">
+                <p class="ticket-comment-author">
+                    @if(comment.User.inRole("Admin") || comment.User.inRole("Demo Admin"))
+                    {
+                        <span class="admin">Admin</span>
+                    }
 
-@if (Model.TicketComments.Count > 0) { 
-    foreach (var comment in Model.TicketComments)
-    {
-        <div>
-            @comment.User.Displayname said:
-            <p>@comment.Comment</p>
-            <p style="font-style:italic">@comment.Created</p>
-        </div>
+                    @if (Model.Project.ManagerId == comment.UserId)
+                    {
+                        <span class="pm">PM</span>
+                    }
+
+                    @if (comment.User.IsDev() || comment.User.inRole("Demo Developer"))
+                    {
+                        <span class="dev">Dev</span>
+                    }
+
+                    @if (Model.OwnerUserId == comment.UserId)
+                    {
+                        <span class="submitter">Submitter</span>
+                    }
+
+                    @comment.User.Displayname said:
+                </p>
+                <p class="ticket-comment-body">@comment.Comment</p>
+                <p class="ticket-comment-date">@comment.Created</p>
+            </div>
+        }
     }
-}
-else
-{
-    <h4>No commments left on this ticket</h4>
-}
-<div>
-    Leave a comment:
-    @using (Html.BeginForm("LeaveComment","TicketComments"))
+    else
     {
-        @Html.AntiForgeryToken();
-        
-        <input type="hidden" name="ticketId" value="@Model.Id" />
-        @Html.TextArea("commentText")
-        <input type="submit" class="form-control" value="Leave Comment" />
+        <h4>No commments for this ticket</h4>
     }
-</div>
+    <div>
+        @if (ViewBag.CommentAttachmentRights)
+        {
+            <span>Leave a comment:</span>
+            using (Html.BeginForm("LeaveComment", "TicketComments"))
+            {
+                @Html.AntiForgeryToken();
+
+            <input type="hidden" name="ticketId" value="@Model.Id" />
+            @Html.TextArea("commentText", new { @required = true })
+                <div class="row">
+                    <div class="col-md-2">
+                        <input type="submit" class="partial-button" value="Leave Comment" />
+                    </div>
+                    
+                </div>
+            }
+        }
+        else
+        {
+            <h4 class="alert">Contact Admin or Project Manager for permission to leave comments.</h4>
+        }
+    </div>
+</section>

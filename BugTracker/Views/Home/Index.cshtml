@@ -1,62 +1,62 @@
 ﻿
-
-<div class="row">
-    <div class="jumbotron app-title">
-        <h1>BugTracker</h1>
-        <h4>By Donny Walton</h4>
+<div id="bug">
+    <div class="row">
+        <div class="jumbotron app-title">
+            <h1>BugTracker</h1>
+            <h4>By Donny Walton</h4>
+        </div>
     </div>
-</div>
-<!--widget box row-->
-<div class="row">
-    <div class="col-sm-6 col-md-3 margin-b-30">
-        
+    <!--widget box row-->
+    <div class="row">
+        <div class="col-sm-6 col-md-3 margin-b-30">
+
             <div class="statistic-widget-box bg-danger">
                 <i class="fa fa-usd"></i>
                 <div class="content overflow-hidden">
                     <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 1 })">
-                        <h1>Administrator</h1>
+                        <h1 class="role-title">Administrator</h1>
                         <p>All Access</p>
                     </a>
                 </div>
             </div><!--statistic box end-->
 
-    </div><!--col end-->
-    <div class="col-sm-6 col-md-3 margin-b-30">
-        <div class="statistic-widget-box bg-primary">
-            <i class="fa fa-shopping-bag"></i>
-            <div class="content overflow-hidden">
-                <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 2 })">
-                    <h1>Project Manager</h1>
-                    <p>Can create projects, assign and edit tickets</p>
-                </a>
-            </div>
-        </div><!--statistic box end-->
-    </div><!--col end-->
-    <div class="col-sm-6 col-md-3 margin-b-30">
-        <div class="statistic-widget-box bg-success">
-            <i class="fa fa-users"></i>
-            <div class="content overflow-hidden">
-                <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 3 })">
-                    <h1>Developer</h1>
-                    <p>Can edit assigned tickets</p>
-                </a>
+        </div><!--col end-->
+        <div class="col-sm-6 col-md-3 margin-b-30">
+            <div class="statistic-widget-box bg-primary">
+                <i class="fa fa-shopping-bag"></i>
+                <div class="content overflow-hidden">
+                    <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 2 })">
+                        <h1 class="role-title">Project Manager</h1>
+                        <p>Can create projects, assign and edit tickets</p>
+                    </a>
                 </div>
-        </div><!--statistic box end-->
-    </div><!--col end-->
-    <div class="col-sm-6 col-md-3 margin-b-30">
-        <div class="statistic-widget-box bg-info">
-            <i class="fa fa-bar-chart"></i>
-            <div class="content overflow-hidden">
-                <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 4 })">
-                    <h1>Submitter</h1>
-                    <p>Can submit tickets to projects</p>
-                </a>
-            </div>
-        </div><!--statistic box end-->
-    </div><!--col end-->
+            </div><!--statistic box end-->
+        </div><!--col end-->
+        <div class="col-sm-6 col-md-3 margin-b-30">
+            <div class="statistic-widget-box bg-success">
+                <i class="fa fa-users"></i>
+                <div class="content overflow-hidden">
+                    <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 3 })">
+                        <h1 class="role-title">Developer</h1>
+                        <p>Can edit assigned tickets</p>
+                    </a>
+                </div>
+            </div><!--statistic box end-->
+        </div><!--col end-->
+        <div class="col-sm-6 col-md-3 margin-b-30">
+            <div class="statistic-widget-box bg-info">
+                <i class="fa fa-bar-chart"></i>
+                <div class="content overflow-hidden">
+                    <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 4 })">
+                        <h1 class="role-title">Submitter</h1>
+                        <p>Can submit tickets to projects</p>
+                    </a>
+                </div>
+            </div><!--statistic box end-->
+        </div><!--col end-->
+    </div>
+    <!--widget box row-->
 </div>
-<!--widget box row-->
-
 
 
 

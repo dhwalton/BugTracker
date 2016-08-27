@@ -49,7 +49,12 @@
 
             <input type="hidden" name="ticketId" value="@Model.Id" />
             @Html.TextArea("commentText", new { @required = true })
-            <input type="submit" class="form-control" value="Leave Comment" />
+                <div class="row">
+                    <div class="col-md-2">
+                        <input type="submit" class="partial-button" value="Leave Comment" />
+                    </div>
+                    
+                </div>
             }
         }
         else

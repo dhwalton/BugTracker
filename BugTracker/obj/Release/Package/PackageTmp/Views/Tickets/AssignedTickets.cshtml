@@ -6,24 +6,8 @@
 
 <h2>My Assigned Tickets</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create") | @Html.ActionLink("All Tickets", "Index") | @Html.ActionLink("My Assigned Tickets", "AssignedTickets")
-    @if (User.IsInRole("Submitter"))
-    {
-        <span>|</span> @Html.ActionLink("My Submitted Tickets", "SubmittedTickets")
-    }
+@Html.Partial("_TicketNav")
 
-    |
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken();
-        @Html.Label("Search")
-        <span>&nbsp;</span>
-        @Html.TextBox("searchStr")
-        <input type="submit" value="Go" />
-    }
-</p>
 <table class="table" id="data-table">
     <thead>
         <tr>
