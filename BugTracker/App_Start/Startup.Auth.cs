@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
+using Owin.Security.Providers.LinkedIn;
 using Owin;
 using BugTracker.Models;
 
@@ -54,9 +55,11 @@ namespace BugTracker
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseLinkedInAuthentication("77sxyqbv3s4pgm", "KN3lhiWioi7eea3X");
+
+            app.UseFacebookAuthentication(
+               appId: "375557392567861",
+               appSecret: "4e4169a94321a14415711e270389afd2");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
