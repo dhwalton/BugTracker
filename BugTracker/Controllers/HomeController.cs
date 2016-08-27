@@ -32,8 +32,8 @@ namespace BugTracker.Controllers
 
             user.Notifications = user.Notifications.OrderBy(n => n.IsRead).ToList();
             ViewBag.UserTickets = userTickets.ToList();
-            ViewBag.TicketComments = helper.AssignedTicketComments(user.Id).OrderByDescending(c => c.Created).ToList();
-            //ViewBag.TicketComments = userTicketComments;
+            //ViewBag.TicketComments = helper.AssignedTicketComments(user.Id).OrderByDescending(c => c.Created).ToList();
+            ViewBag.TicketComments = userTicketComments.ToList();
             return View(user);
         }
 

@@ -58,11 +58,11 @@ namespace BugTracker
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "427414889698-4kmjkfp0s3ofu8ak1k95h03h40mlftki.apps.googleusercontent.com",
+                ClientSecret = "SM4BfXNJYmTzzvGjqULaz-2D"
+            });
         }
     }
 }
