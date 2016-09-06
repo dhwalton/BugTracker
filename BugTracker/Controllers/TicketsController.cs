@@ -346,6 +346,9 @@ namespace BugTracker.Controllers
             tHelper.clearNotifications(id ?? 1, userId);
 
 
+            
+
+
             ViewBag.AssignedUserId = new SelectList(db.Users, "Id", "FirstName", tickets.AssignedUserId);
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", tickets.OwnerUserId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", tickets.TicketPriorityId);

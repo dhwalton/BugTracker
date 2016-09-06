@@ -41,7 +41,7 @@
         @if (Model.Project.ManagerId != null)
         {
             <span>@Model.Manager.FirstName</span> <span>@Model.Manager.LastName</span>
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin") || (User.IsInRole("Demo Admin") && Model.Project.DemoProject))
             {
                 <span class="remove-manager">@Html.ActionLink("X","ChangeProjectManager",new { userId = "", projectId = @Model.Project.Id })</span>
             }

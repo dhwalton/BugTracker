@@ -14,7 +14,7 @@ namespace BugTracker.Models
         [AllowHtml]
         [Required]
         public string Comment { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd MMM yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTimeOffset Created { get; set; }
         public int TicketsId { get; set; }
         public string UserId { get; set; }

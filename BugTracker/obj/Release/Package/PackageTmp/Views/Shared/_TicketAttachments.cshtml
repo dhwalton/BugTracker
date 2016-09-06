@@ -1,6 +1,6 @@
 ﻿@model BugTracker.Models.Tickets
 <section id="ticket-attachments">
-    <h4>Attachments for this Ticket</h4>
+    @*<h4>Attachments for this Ticket</h4>*@
     @if (Model.TicketAttachments.Count > 0)
     {
         if (Model.TicketAttachments.Count == 1)

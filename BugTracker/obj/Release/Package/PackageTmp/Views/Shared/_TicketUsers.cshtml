@@ -5,7 +5,7 @@
     {
         <h4>Assign a user to this ticket</h4>
         <table class="user-list">
-            <tr><th>Role(s)</th><th>Name</th><th>Display Name</th><th>Email</th><th>Remove</th></tr>
+            <tr><th>Role(s)</th><th>Name</th><th>Display Name</th><th>Email</th><th>Action</th></tr>
             @foreach (var user in Model.Project.Users)
             {
                 <tr>
@@ -22,7 +22,7 @@
                     <td>@user.FirstName @user.LastName</td>
                     <td>@user.Displayname</td>
                     <td>@user.Email</td>
-                    <td>@Html.ActionLink("Assign", "AssignUserToTicket", new { TicketId = Model.Id, UserId = @user.Id })</td>
+                    <td><span class="add-user">@Html.ActionLink("Assign", "AssignUserToTicket", new { TicketId = Model.Id, UserId = @user.Id })</span></td>
                 </tr>
             }
         </table>
@@ -32,7 +32,7 @@
         @Html.LabelFor(model => model.AssignedUserId, "Assigned User", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.Label(Model.AssignedUser.Displayname, htmlAttributes: new { @class = "control-label" })
-            @Html.ActionLink(" X", "RemoveAssignedUserFromTicket", new { ticketId = Model.Id })
+            <span class="remove-manager">@Html.ActionLink(" X", "RemoveAssignedUserFromTicket", new { ticketId = Model.Id })</span>
         </div>
     }
 

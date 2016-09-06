@@ -57,7 +57,7 @@
             <td>@user.FirstName @user.LastName</td>
             <td>@user.Displayname</td>
             <td>@user.Email</td>
-            <td>@Html.ActionLink("X", "RemoveProjectUser", new { ProjectId = Model.Project.Id, UserId = @user.Id }, new { @class = "removeFromProject" })</td>
+            <td><span class="remove-manager">@Html.ActionLink("X", "RemoveProjectUser", new { ProjectId = Model.Project.Id, UserId = @user.Id }, new { @class = "removeFromProject" })</span></td>
         </tr>
     }
 </table>

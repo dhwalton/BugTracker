@@ -7,6 +7,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Web;
+using SendGrid;
+using System.Configuration;
 
 public class TicketsHelper
 {
@@ -30,6 +32,21 @@ public class TicketsHelper
         };
         db.TicketNotifications.Add(notification);
         db.SaveChanges();
+
+        var thisUser = db.Users.Find(HttpContext.Current.User.Identity.GetUserId());
+        if (!(thisUser.inRole("Demo Submitter") || thisUser.inRole("Demo Admin") || thisUser.inRole("Demo Project Manager") || thisUser.inRole("Demo Developer"))) {
+            var user = db.Users.Find(userId);
+            var ticket = db.Tickets.Find(ticketId);
+            var apiKey = ConfigurationManager.AppSettings["SendGridAPIKey"];
+            var from = ConfigurationManager.AppSettings["ContactEmail"];
+            var msg = new SendGrid.SendGridMessage();
+            msg.AddTo(user.Email);
+            msg.From = new System.Net.Mail.MailAddress(from, "BugTracker");
+            msg.Subject = "New Activity on Ticket - " + ticket.Title;
+            msg.Text = "Ticket '" + ticket.Title + "' has new activity: " + message + "Visit https://dhwalton-bugtracker.azurewebsites.net to login.";
+            var transportweb = new SendGrid.Web(apiKey);
+            transportweb.DeliverAsync(msg);
+        }
     }
 
     public void clearNotifications(int ticketId, string userId)

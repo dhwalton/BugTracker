@@ -4,30 +4,36 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>Tickets</h4>
+    <h2>Ticket: @Model.Title</h2>
+    <h3>Project: @Model.Project.Name</h3>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.AssignedUser.FirstName)
+            Submitted by
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.AssignedUser.FirstName)
+            @Html.DisplayFor(model => model.OwnerUser.Displayname)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.OwnerUser.FirstName)
+            Assigned to
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.OwnerUser.FirstName)
+            @if (Model.AssignedUser == null)
+            {
+                <span class="unassigned">Unassigned</span>
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.AssignedUser.Displayname)
+            }
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TicketPriority.Name)
+            Priority
         </dt>
 
         <dd>
@@ -35,7 +41,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TicketStatus.Name)
+            Status
         </dt>
 
         <dd>
@@ -43,27 +49,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TicketType.Name)
+            Type
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.TicketType.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
         </dd>
 
         <dt>
@@ -82,15 +72,12 @@
             @Html.DisplayFor(model => model.Updated)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ProjectId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProjectId)
-        </dd>
-
     </dl>
+    <hr />
+    <h3>Description of Issue</h3>
+    <div id="issue">
+        @Html.DisplayFor(model => model.Description)
+    </div>
 </div>
 @Html.Partial("_TicketAttachments")
 @Html.Partial("_TicketComments")

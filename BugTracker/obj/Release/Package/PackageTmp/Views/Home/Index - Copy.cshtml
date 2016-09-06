@@ -1,0 +1,75 @@
+﻿
+<div id="bug">
+    <div class="row">
+        <div class="jumbotron app-title">
+            <h1>BugTracker</h1>
+            <h4>By Donny Walton</h4>
+        </div>
+    </div>
+    <!--widget box row-->
+    <div class="row" id="role-login">
+        <div class="col-sm-6 col-lg-3 margin-b-30">
+
+            <div class="statistic-widget-box bg-danger">
+                <i class="fa fa-briefcase"></i>
+                <div class="content overflow-hidden">
+                    <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 1 })">
+                        <h1 class="role-title">Admin</h1>
+                        <p>All Access</p>
+                    </a>
+                </div>
+            </div><!--statistic box end-->
+
+        </div><!--col end-->
+        <div class="col-sm-6 col-lg-3 margin-b-30">
+            <div class="statistic-widget-box bg-primary">
+                <i class="fa fa-binoculars"></i>
+                <div class="content overflow-hidden">
+                    <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 2 })">
+                        <h1 class="role-title">Manager</h1>
+                        <p>Can create projects, assign and edit tickets</p>
+                    </a>
+                </div>
+            </div><!--statistic box end-->
+        </div><!--col end-->
+        <div class="col-sm-6 col-lg-3 margin-b-30">
+            <div class="statistic-widget-box bg-success">
+                <i class="fa fa-user"></i>
+                <div class="content overflow-hidden">
+                    <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 3 })">
+                        <h1 class="role-title">Developer</h1>
+                        <p>Can edit assigned tickets</p>
+                    </a>
+                </div>
+            </div><!--statistic box end-->
+        </div><!--col end-->
+        <div class="col-sm-6 col-lg-3 margin-b-30">
+            <div class="statistic-widget-box bg-info">
+                <i class="fa fa-users"></i>
+                <div class="content overflow-hidden">
+                    <a href="@Url.Action("DemoLogin","Account",new { roleIndex = 4 })">
+                        <h1 class="role-title">Submitter</h1>
+                        <p>Can submit tickets to projects</p>
+                    </a>
+                </div>
+            </div><!--statistic box end-->
+        </div><!--col end-->
+    </div>
+    <!--widget box row-->
+</div>
+
+
+
+@Html.Partial("_Login")
+
+@section scripts {
+
+<script>
+    $(document).ready(function () {
+        $("#Google").html('<i class="fa fa-google"></i>');
+        $("#Facebook").html('<i class="fa fa-facebook"></i>');
+        $("#LinkedIn").html('<i class="fa fa-linkedin"></i>');
+    });
+</script>    
+    
+}

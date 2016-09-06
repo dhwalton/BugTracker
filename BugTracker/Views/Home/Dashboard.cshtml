@@ -33,7 +33,7 @@
                                         <div class="stream-item stream-primary">
                                             <div class="stream-content">
                                                 @*<small class="text-muted">34 mins ago</small>*@
-                                                <p><a href="@Url.Action("Edit","Tickets", new { id = @notification.TicketId })"><span class="ticket-name">@notification.Ticket.Title</span></a>: <span class="notification-message">@notification.Message</span></p>
+                                                <p><a href="@Url.Action("Edit", "Tickets", new { id = @notification.TicketId })"><span class="ticket-name">@notification.Ticket.Title</span></a>: <span class="notification-message">@notification.Message</span></p>
                                             </div>
                                         </div><!-- .stream-item -->
                                     }
@@ -42,7 +42,7 @@
                                         <div class="stream-item stream-danger">
                                             <div class="stream-content">
                                                 @*<small class="text-muted">34 mins ago</small>*@
-                                                <p><a href="@Url.Action("Edit","Tickets", new { id = @notification.TicketId })"><span class="ticket-name">@notification.Ticket.Title</span></a>: <span class="notification-message">@notification.Message</span></p>
+                                                <p><a href="@Url.Action("Edit", "Tickets", new { id = @notification.TicketId })"><span class="ticket-name">@notification.Ticket.Title</span></a>: <span class="notification-message">@notification.Message</span></p>
                                             </div>
                                         </div><!-- .stream-item -->
                                     }
@@ -70,7 +70,16 @@
                                 </ul>*@
                             </div>
                         </div>
-                        <h2 class="panel-title">My Assigned Tickets</h2>
+                        <h2 class="panel-title">
+                            @if (User.IsInRole("Admin") || User.IsInRole("Demo Admin"))
+                            {
+                                <span>All Tickets</span>
+                            }
+                            else
+                            {
+                                <span>My Tickets</span>
+                            }
+                        </h2>
                     </header>
                     <div class="panel-body">
                         <div class="scrollDiv">

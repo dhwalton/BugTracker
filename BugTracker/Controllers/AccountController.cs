@@ -308,6 +308,25 @@ namespace BugTracker.Controllers
             return RedirectToAction("ConfirmationSent");
         }
 
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+    //    public async Task<ActionResult> EmailTicketNotification(ApplicationUser user, TicketNotifications notification)
+        public async void EmailTicketNotification(ApplicationUser user, TicketNotifications notification)
+
+        {
+            //var user = await UserManager.FindByNameAsync(model.Email);
+            if (user != null && notification != null)
+            {
+                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Confirm your account", "New activity on ticket '" + notification.Ticket.Title + "' - " + notification.Message);
+            }
+            //return RedirectToAction("Edit","Tickets",new { id = notification.TicketId });
+        }
+
+
         public ActionResult ConfirmationSent()
         {
             return View();

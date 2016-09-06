@@ -38,10 +38,16 @@ namespace BugTracker.Models
         public DateTimeOffset? Updated { get; set; }
 
         public int ProjectId { get; set; }
+
+        [Display(Name = "Type")]
         public int TicketTypeId { get; set; }
+        [Display(Name = "Priority")]
         public int TicketPriorityId { get; set; }
+        [Display(Name = "Status")]
         public int TicketStatusId { get; set; }
+        [Display(Name = "Submitted by")]
         public string OwnerUserId { get; set; } 
+        [Display(Name = "Assigned to")]
         public string AssignedUserId { get; set; }
 
         public virtual ICollection<TicketNotifications> TicketNotifications { get; set; }

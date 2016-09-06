@@ -17,12 +17,12 @@
    
 }
 
-#user-list tr:nth-child(even) a, .user-list tr:nth-child(even) a, #project-tickets tr:nth-child(even) a {
-   /*color: #000;*/
+/*#user-list tr:nth-child(even) a, .user-list tr:nth-child(even) a, #project-tickets tr:nth-child(even) a {
+   color: #000;
    
-}
+}*/
 
-.dev, .pm, .admin, .submitter {
+.dev, .pm, .admin, .submitter, .remove-manager, .add-user {
     box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
     padding: 2px 4px;
     border-radius: 0.25em;
@@ -35,12 +35,20 @@
     background-color: green;
 }
 
+.add-user {
+    background-color: lime;
+}
+
+.add-user a {
+    color: #000;
+}
+
 .pm {
     color: red;
     background-color: yellow;
 }
 
-.admin {
+.admin, .remove-manager {
     color: #fff;
     background-color: #f00;
 }
@@ -58,18 +66,22 @@
     padding: 0 0.75em 0 0;
 }
 
-.remove-manager {
+/*.remove-manager {
     font-size: 0.6em;
-    padding: 0.1em 0.3em;
+    padding: 0.3em 0.6em;
     border: 1px solid;
     border-radius: 0.3em;
     background-color: red;
-    
+    font-size: 12px;
 }
+
+.removeFromProject {
+    
+}*/
 
 .remove-manager a {
     color: #fff;
-    font-weight: 700;
+    /*font-weight: 700;*/
 }
 
 .ticket-nav a {
@@ -100,7 +112,7 @@
    box-shadow: 0px 0px 3px rgba(0,0,0,0.25);
 }
 
-#ticket-attachments textarea, #ticket-comments textarea {
+#ticket-attachments textarea, #ticket-comments textarea, .textarea-container textarea {
     width: 100%;
 }
 
@@ -238,4 +250,41 @@
 #role-login {
     margin: 0 auto;
     /*max-width: 1080px;*/
+}
+
+#LinkedIn, #Google, #Facebook {
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.55);  
+    font-size: 2.5em;
+    margin: 0 0.5em;
+    padding: 0.25em;
+    /*height: 4em;*/
+    width: 2em;
+    border-radius: 0.25em;
+    /*text-indent: -9999px;*/
+}
+
+#Google {
+    background-color: #fff;
+    color: #3369e8;
+}
+
+#LinkedIn {
+    background-color: #3369e8;
+    color: #fff;
+}
+
+#Facebook {
+    background-color: #3b5998;
+    color: #fff;
+}
+
+#issue {
+    padding: 1em;
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+.unassigned {
+    font-weight: 700;
+    color: #f00;
 }

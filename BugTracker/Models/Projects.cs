@@ -16,7 +16,7 @@ namespace BugTracker.Models
             
         }
         public int Id { get; set; }
-
+        
         [Display(Name = "Project Name")]
         public string Name { get; set; }
 

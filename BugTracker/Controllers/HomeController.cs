@@ -19,16 +19,32 @@ namespace BugTracker.Controllers
         {
             var helper = new TicketsHelper();
             var user = db.Users.Find(User.Identity.GetUserId());
+            IList<Tickets> userTickets;
+            IList<TicketComments> userTicketComments;
 
-            var userTickets = helper.TicketsAssignedToUser(user.Id)
+            if (User.IsInRole("Admin"))
+            {
+                userTickets = db.Tickets.Where(t => t.Project.DemoProject == false).ToList();
+                userTicketComments = db.TicketComments.Where(c => c.Tickets.Project.DemoProject == false).ToList();
+            }
+            else if (User.IsInRole("Demo Admin"))
+            {
+                userTickets = db.Tickets.Where(t => t.Project.DemoProject).ToList();
+                userTicketComments = db.TicketComments.Where(c => c.Tickets.Project.DemoProject).ToList();
+            }
+            else
+            {
+                userTickets = helper.TicketsAssignedToUser(user.Id)
                                .Union(db.Tickets.Where(t => t.Project.ManagerId == user.Id))
                                .Union(db.Tickets.Where(t => t.OwnerUserId == user.Id))
-                               .OrderByDescending(t => t.Updated);
-            var userTicketComments = db.TicketComments
-                                       .Where(c => c.Tickets.AssignedUserId == user.Id)
-                                       .Union(db.TicketComments.Where(c => c.Tickets.Project.ManagerId == user.Id))
-                                       .Union(db.TicketComments.Where(c => c.Tickets.OwnerUserId == user.Id))
-                                       .OrderByDescending(c => c.Created);
+                               .OrderByDescending(t => t.Updated).ToList();
+                userTicketComments = db.TicketComments
+                                           .Where(c => c.Tickets.AssignedUserId == user.Id)
+                                           .Union(db.TicketComments.Where(c => c.Tickets.Project.ManagerId == user.Id))
+                                           .Union(db.TicketComments.Where(c => c.Tickets.OwnerUserId == user.Id))
+                                           .OrderByDescending(c => c.Created).ToList();
+            }
+            
 
             user.Notifications = user.Notifications.OrderBy(n => n.IsRead).ToList();
             ViewBag.UserTickets = userTickets.ToList();
