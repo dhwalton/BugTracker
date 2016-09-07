@@ -184,7 +184,7 @@
                                                 </div>
                                             </div>
                                             <div class="media-body">
-                                                <h5><a href="@Url.Action("Edit","Tickets",new { id = @comment.Tickets.Id })" class="text-color">@comment.Comment</a></h5>
+                                                <h5><a href="@Url.Action("Edit","Tickets",new { id = @comment.Tickets.Id })" class="text-color">@Html.Raw(comment.Comment)</a></h5>
                                                 <small class="text-muted">@comment.Created by <span class="strong">@comment.User.Displayname</span></small>
                                             </div>
                                         </div>

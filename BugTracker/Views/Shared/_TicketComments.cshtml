@@ -30,8 +30,8 @@
 
                     @comment.User.Displayname said:
                 </p>
-                <p class="ticket-comment-body">@comment.Comment</p>
-                @*<p class="ticket-comment-date">@comment.Created</p>*@
+                <p class="ticket-comment-body">@Html.Raw(@comment.Comment)</p>
+                <p class="ticket-comment-date">@comment.Created</p>
                 <p class="ticket-comment-date"></p>
             </div>
         }
@@ -44,7 +44,7 @@
         @if (ViewBag.CommentAttachmentRights)
         {
             <span>Leave a comment:</span>
-            using (Html.BeginForm("LeaveComment", "TicketComments"))
+            using (Html.BeginForm("LeaveComment", "TicketComments", FormMethod.Post, new { novalidate = true }))
             {
                 @Html.AntiForgeryToken();
 

@@ -23,7 +23,7 @@
                     <div class="attachment-img"><img src="~/Uploads/TxtFile.png" /></div>
                 }
 
-                <p><a href="@attachment.FileUrl" target="_top"><span>@attachment.FileUrl</span></a><br /><span>@attachment.Description</span></p>
+                <p><a href="@attachment.FileUrl" target="_top"><span>@attachment.FileUrl</span></a><br /><span>@Html.Raw(@attachment.Description)</span></p>
                 <p>Uploaded by <span>@attachment.User.FirstName</span> <span>@attachment.User.LastName on @attachment.Created</span></p>
             </div>
         }
@@ -36,7 +36,7 @@
         <h4>Upload an Attachment</h4>
         @if (ViewBag.CommentAttachmentRights)
         {
-            using (Html.BeginForm("UploadTicketAttachment", "Tickets", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            using (Html.BeginForm("UploadTicketAttachment", "Tickets", FormMethod.Post, new { enctype = "Multipart/form-data", novalidate = true }))
             {
                 @Html.AntiForgeryToken();
                 <input type="hidden" name="ticketId" value="@Model.Id" />

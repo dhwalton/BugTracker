@@ -1,24 +1,35 @@
 ﻿@using BugTracker.Models;
 @model BugTracker.Models.ProjectDetailViewModel
 
-@if (Model.UsersNotInProject != null) { 
-    foreach (var user in Model.UsersNotInProject)
-    {
-            <div class="user-search">
-                @*<input type="checkbox" class="cb" id="@user.Id" />*@ 
-                @Html.ActionLink("Add", "AddUserToProject", new {ProjectId = Model.Project.Id, UserId = user.Id }, new { @class="addToProject" })
-                @if (user.IsPM() || user.inRole("Demo Project Manager")) 
+@if (Model.UsersNotInProject != null)
+{
+    <table class="user-list">
+        <tr><th>Action</th><th>User Name</th><th>User Email</th></tr>
+        @foreach (var user in Model.UsersNotInProject)
+        {
+        <tr>
+            @*<input type="checkbox" class="cb" id="@user.Id" />*@
+            <td>
+                <span class="add-user">@Html.ActionLink("Add", "AddUserToProject", new { ProjectId = Model.Project.Id, UserId = user.Id }, new { @class = "addToProject" })</span>
+            </td>
+            <td>
+                @if (user.IsPM() || user.inRole("Demo Project Manager"))
                 {
-                    <span class="pm">PM</span> 
+                    <span class="pm">PM</span>
                 }
-                @if (user.IsDev() || user.inRole("Demo Developer")) 
+                @if (user.IsDev() || user.inRole("Demo Developer"))
                 {
-                    <span class="dev">Dev</span> 
+                    <span class="dev">Dev</span>
                 }
 
-                @user.Displayname | @user.Email
-            </div>
+                @user.Displayname
+            </td> 
+            <td>
+                @user.Email
+            </td>
+        </tr>
 
-    }
+        }
+    </table>
 }
 

@@ -37,6 +37,7 @@ namespace BugTracker.Models
         [DisplayFormat(DataFormatString = "{0:MM/dd/yy, h:mm tt}")]
         public DateTimeOffset? Updated { get; set; }
 
+        [Display(Name = "Project")]
         public int ProjectId { get; set; }
 
         [Display(Name = "Type")]

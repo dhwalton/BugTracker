@@ -599,6 +599,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="index.html" />
+    <Content Include="js\jquery.tinymce.min.js" />
     <Content Include="landing\bootstrap\css\bootstrap-theme.css" />
     <Content Include="landing\bootstrap\css\bootstrap-theme.min.css" />
     <Content Include="landing\bootstrap\css\bootstrap.css" />

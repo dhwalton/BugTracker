@@ -14,8 +14,8 @@
                         <td>@item.ChangedDate</td>
                         <td>@item.User.Displayname</td>
                         <td>@item.Property</td>
-                        <td class="old">@item.ToMessage(true)</td>
-                        <td class="new">@item.ToMessage(false)</td>
+                        <td class="old">@Html.Raw(@item.ToMessage(true))</td>
+                        <td class="new">@Html.Raw(@item.ToMessage(false))</td>
                     </tr>
                 }
             </tbody>

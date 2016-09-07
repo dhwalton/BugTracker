@@ -67,6 +67,7 @@ namespace BugTracker.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateInput(false)]
         [ValidateAntiForgeryToken]
         public ActionResult LeaveComment(string commentText, int ticketId)
         {

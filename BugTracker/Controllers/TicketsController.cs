@@ -424,6 +424,7 @@ namespace BugTracker.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         [Authorize(Roles = "Admin, Developer, Project Manager, Submitter, Demo Admin, Demo Submitter, Demo Project Manager, Demo Developer")]
         public ActionResult UploadTicketAttachment(int ticketId, string description, HttpPostedFileBase attachment)
         {

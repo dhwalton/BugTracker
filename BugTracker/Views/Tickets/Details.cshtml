@@ -76,7 +76,7 @@
     <hr />
     <h3>Description of Issue</h3>
     <div id="issue">
-        @Html.DisplayFor(model => model.Description)
+        @Html.Raw(Model.Description)
     </div>
 </div>
 @Html.Partial("_TicketAttachments")
@@ -87,7 +87,10 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 @section Scripts {
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script>tinymce.init({ selector:'textarea' });</script>
     <script>
+
         $(document).ready(function () {
             $('#ticket-history').DataTable();
         });
